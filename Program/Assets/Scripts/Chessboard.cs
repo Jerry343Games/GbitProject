@@ -16,33 +16,37 @@ public class Chessboard : MonoBehaviour
     }
 
     /// <summary>
-    /// ÊµÊ±¼ì²âÊó±êÎ»ÖÃ²¢¸ßÁÁ¶ÔÓ¦Íø¸ñ£¬ĞèÒªÔÚUpdateÖĞÖ´ĞĞ
+    /// å®æ—¶æ£€æµ‹é¼ æ ‡ä½ç½®å¹¶é«˜äº®å¯¹åº”ç½‘æ ¼ï¼Œéœ€è¦åœ¨Updateä¸­æ‰§è¡Œ
     /// </summary>
     private void HighlightGrid()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
+        Material targetMat;
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo))
         {
             GameObject hitObject = hitInfo.collider.gameObject;
-
             if (hitObject.CompareTag("Tile"))
             {
                 if (highlightedTile != null && highlightedTile != hitObject)
                 {
-                    highlightedTile.GetComponent<Renderer>().material.color = Color.white;
+                    
+                    targetMat= highlightedTile.GetComponent<Renderer>().material;
+                    targetMat.SetColor("_color", Color.white);
                 }
 
+                //é«˜äº®
                 highlightedTile = hitObject;
-                highlightedTile.GetComponent<Renderer>().material.color = Color.yellow;
+                targetMat = highlightedTile.GetComponent<Renderer>().material;
+                targetMat.SetColor("_color", Color.yellow);
             }
         }
         else
         {
             if (highlightedTile != null)
             {
-                highlightedTile.GetComponent<Renderer>().material.color = Color.white;
+                targetMat = highlightedTile.GetComponent<Renderer>().material;
+                targetMat.SetColor("_color", Color.white);
                 highlightedTile = null;
             }
         }
