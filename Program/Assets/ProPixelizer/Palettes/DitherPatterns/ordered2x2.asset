@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74cdf0c806534724588d09de9eb20ea1, type: 3}
+  m_Name: ordered2x2
+  m_EditorClassIdentifier: 
+  m00: 0.20588236
+  m01: 0.7941176
+  m02: 0.20588236
+  m03: 0.7941176
+  m10: 0.60294116
+  m11: 0.38235295
+  m12: 0.60294116
+  m13: 0.38235295
+  m20: 0.20588236
+  m21: 0.7941176
+  m22: 0.20588236
+  m23: 0.7941176
+  m30: 0.60294116
+  m31: 0.38235295
+  m32: 0.60294116
+  m33: 0.38235295

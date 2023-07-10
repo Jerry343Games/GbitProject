@@ -1,0 +1,43 @@
+{
+    "name": "ProPixelizer",
+    "rootNamespace": "",
+    "references": [
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "8.1.0",
+            "define": "CAMERADATA_MATRICES"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "10.5.0",
+            "define": "CAMERA_COLOR_TEX_PROP"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "13.1.2",
+            "define": "URP_13"
+        },
+        {
+            "name": "Unity",
+            "expression": "2022.2.0",
+            "define": "BLIT_API"
+        },
+        {
+            "name": "Unity",
+            "expression": "2022.2.0",
+            "define": "DISABLE_PROPIX_PREVIEW_WINDOW"
+        }
+    ],
+    "noEngineReferences": false
+}
