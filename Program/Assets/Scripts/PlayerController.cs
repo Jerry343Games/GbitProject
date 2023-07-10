@@ -8,29 +8,28 @@ public class PlayerController : MonoBehaviour
     private GameObject playerModel;
     private float horizontal;
     private float vertical;
-    private int camResult=-1;
-    
+    private int camResult = -1;
 
     /// <summary>
-    /// Íæ¼ÒÒÆ¶¯·½ÏòÏòÁ¿
+    /// ç©å®¶ç§»åŠ¨æ–¹å‘å‘é‡
     /// </summary>
     private Vector3 moveDir;
 
-    [Header("ÉãÏñ»úÄ£Ê½Ñ¡Ôñ")]
+    [Header("æ‘„åƒæœºæ¨¡å¼é€‰æ‹©")]
     public bool HD2D;
     public bool THIRD;
-    [Header("Ö÷ÉãÏñ»úÉèÖÃ")]
+    [Header("ä¸»æ‘„åƒæœºè®¾ç½®")]
     public GameObject mainCamera;
     public Transform tracePoint;
     public float smooth;
     private Vector3 camSpeed;
 
-    [Header("Íæ¼ÒÒÆ¶¯ËÙ¶È")]
+    [Header("ç©å®¶ç§»åŠ¨é€Ÿåº¦")]
     public float speed;
 
-
-
-    
+    [Header("ç©å®¶åŠ¨ç”»å™¨")]
+    public Animator animator;
+   
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -45,25 +44,41 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Íæ¼ÒÒÆ¶¯·½·¨
+    /// ç©å®¶ç§»åŠ¨æ–¹æ³•
     /// </summary>
     void PlayerMovement()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
-        //ÒÆ¶¯·½Ïò
+
+        if (characterController.velocity.x >= 0)
+        {
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+            animator.SetBool("isRun", true);
+        }
+        else if (characterController.velocity.x < 0)
+        {
+            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+            animator.SetBool("isRun", true);
+        }
+        else
+        {
+            animator.SetBool("isRun", false);
+        }
+
+        //ç§»åŠ¨æ–¹å‘
         moveDir = (new Vector3(horizontal, 0, vertical)).normalized * speed;
         characterController.SimpleMove(moveDir);
         if (!HD2D)
         {
-            //Ä£ĞÍ³¯Ïò
+            //æ¨¡å‹æœå‘
             Vector3 lookDir = transform.position + moveDir;
             playerModel.transform.LookAt(lookDir);
         }
     }
 
     /// <summary>
-    /// ¼ì²éÏà»úÑ¡ÔñÊÇ·ñÕıÈ·
+    /// æ£€æŸ¥ç›¸æœºé€‰æ‹©æ˜¯å¦æ­£ç¡®
     /// </summary>
     /// <returns></returns>
     int CameraCheck()
@@ -71,29 +86,29 @@ public class PlayerController : MonoBehaviour
         //HD2D
         if (!THIRD && HD2D)
         {
-            Debug.Log("ÆôÓÃHD2DÄ£Ê½Ïà»ú");
+            Debug.Log("å¯ç”¨HD2Dæ¨¡å¼ç›¸æœº");
             return 0;
         }
-        //µÚÈıÈË³Æ
+        //ç¬¬ä¸‰äººç§°
         else if (THIRD && !HD2D)
         {
-            Debug.Log("ÆôÓÃ3DÄ£Ê½Ïà»ú");
+            Debug.Log("å¯ç”¨3Dæ¨¡å¼ç›¸æœº");
             return 1;
         }
         else if (!THIRD && !HD2D)
         {
-            Debug.LogWarning("ÇëÑ¡ÔñÏà»úÄ£Ê½");
+            Debug.LogWarning("è¯·é€‰æ‹©ç›¸æœºæ¨¡å¼");
             return -1;
         }
         else
         {
-            Debug.LogWarning("Ïà»úÄ£Ê½²»¿ÉÍ¬Ê±Ñ¡ÖĞ");
+            Debug.LogWarning("ç›¸æœºæ¨¡å¼ä¸å¯åŒæ—¶é€‰ä¸­");
             return -1;
         }
     }
 
     /// <summary>
-    /// Ïà»ú¸ú×Ù·½·¨
+    /// ç›¸æœºè·Ÿè¸ªæ–¹æ³•
     /// </summary>
     void MainCameraFollow(Transform target,GameObject mainCamera)
     {
@@ -106,8 +121,7 @@ public class PlayerController : MonoBehaviour
         if (camResult == 1)
         {
 
-        }
-        
+        }       
     }
 
 
