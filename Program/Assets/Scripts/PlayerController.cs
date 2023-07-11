@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController characterController;
@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     /// 玩家移动方向向量
     /// </summary>
     private Vector3 moveDir;
+    private Vector2 InputMove;
+    PlayerInput playerInput;
 
     [Header("ChooseCam")]
     public bool HD2D;
@@ -29,9 +31,10 @@ public class PlayerController : MonoBehaviour
 
     [Header("PlayerAnimator")]
     public Animator animator;
-   
+
     void Start()
     {
+        playerInput = GetComponent<PlayerInput>();
         characterController = GetComponent<CharacterController>();
         playerModel = GameObject.Find("PlayerModel");
         camResult= CameraCheck();
@@ -44,14 +47,19 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// 用于接收InputAction返回的玩家输入数据
+    /// </summary>
+    /// <param name="value0"></param>
+    public void OnMovement(InputAction.CallbackContext value0)
+    {
+        InputMove = value0.ReadValue<Vector2>();
+    }
+    /// <summary>
     /// 玩家移动方法
     /// </summary>
     void PlayerMovement()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-
-        //动画条件设置和Sprite翻转
+        //动画器条件设置和Sprite翻转
         if (characterController.velocity.x > 0)
         {
             transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
@@ -71,14 +79,13 @@ public class PlayerController : MonoBehaviour
         }
 
         //移动方向
-        moveDir = (new Vector3(horizontal, 0, vertical)).normalized * speed;
+        moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized * speed;
         characterController.SimpleMove(moveDir);
-        if (!HD2D)
-        {
-            //模型朝向
-            Vector3 lookDir = transform.position + moveDir;
-            playerModel.transform.LookAt(lookDir);
-        }
+
+        //模型朝向
+        //Vector3 lookDir = transform.position + moveDir;
+        //playerModel.transform.LookAt(lookDir);
+        
     }
 
     /// <summary>
