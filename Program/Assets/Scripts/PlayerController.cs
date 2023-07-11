@@ -15,19 +15,19 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private Vector3 moveDir;
 
-    [Header("摄像机模式选择")]
+    [Header("ChooseCam")]
     public bool HD2D;
     public bool THIRD;
-    [Header("主摄像机设置")]
+    [Header("MainCam")]
     public GameObject mainCamera;
     public Transform tracePoint;
     public float smooth;
     private Vector3 camSpeed;
 
-    [Header("玩家移动速度")]
+    [Header("PlayerSpeed")]
     public float speed;
 
-    [Header("玩家动画器")]
+    [Header("PlayerAnimator")]
     public Animator animator;
    
     void Start()
@@ -51,7 +51,8 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
 
-        if (characterController.velocity.x >= 0)
+        //动画条件设置和Sprite翻转
+        if (characterController.velocity.x > 0)
         {
             transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
             animator.SetBool("isRun", true);
@@ -59,6 +60,9 @@ public class PlayerController : MonoBehaviour
         else if (characterController.velocity.x < 0)
         {
             transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+            animator.SetBool("isRun", true);
+        }else if (characterController.velocity.z!=0)
+        {
             animator.SetBool("isRun", true);
         }
         else
@@ -116,12 +120,7 @@ public class PlayerController : MonoBehaviour
         if (camResult==0)
         {
             mainCamera.transform.position= Vector3.SmoothDamp(mainCamera.transform.position,target.transform.position,ref camSpeed ,smooth);
-        }
-
-        if (camResult == 1)
-        {
-
-        }       
+        }    
     }
 
 
