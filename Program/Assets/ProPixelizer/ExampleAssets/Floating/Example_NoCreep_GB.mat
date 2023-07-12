@@ -83,6 +83,7 @@ Material:
     m_Floats:
     - COLOR_GRADING: 1
     - NORMAL_MAP: 0
+    - PROPIXELIZER_DITHERING: 1
     - RECEIVE_SHADOWS: 1
     - USE_ALPHA: 0
     - USE_EMISSION: 0
@@ -94,12 +95,14 @@ Material:
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DiffuseVertexColorWeight: 1
     - _DstBlend: 0
+    - _EmissiveVertexColorWeight: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _ID: 1
+    - _ID: 54
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _PixelSize: 5

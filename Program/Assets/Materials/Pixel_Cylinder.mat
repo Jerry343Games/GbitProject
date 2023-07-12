@@ -117,10 +117,10 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _ID: 29
+    - _ID: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _PixelSize: 2
+    - _PixelSize: 5
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -132,7 +132,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _AmbientLight: {r: 0.2, g: 0.2, b: 0.2, a: 0}
-    - _BaseColor: {r: 0.6924528, g: 0.9852397, b: 1, a: 1}
+    - _BaseColor: {r: 0.42830187, g: 0.9706822, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeHighlightColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

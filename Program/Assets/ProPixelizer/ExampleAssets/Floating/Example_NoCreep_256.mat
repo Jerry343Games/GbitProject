@@ -83,6 +83,7 @@ Material:
     m_Floats:
     - COLOR_GRADING: 0
     - NORMAL_MAP: 0
+    - PROPIXELIZER_DITHERING: 1
     - RECEIVE_SHADOWS: 1
     - USE_ALPHA: 0
     - USE_EMISSION: 0

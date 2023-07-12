@@ -62,20 +62,31 @@ public class PlayerController : MonoBehaviour
         //动画器条件设置和Sprite翻转
         if (characterController.velocity.x > 0)
         {
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-            animator.SetBool("isRun", true);
+            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+            animator.SetBool("isRunSide", true);
+            animator.SetBool("isRunFount", false);
+
         }
         else if (characterController.velocity.x < 0)
         {
-            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-            animator.SetBool("isRun", true);
-        }else if (characterController.velocity.z!=0)
+            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+            animator.SetBool("isRunSide", true);
+            animator.SetBool("isRunFount", false);
+        }
+        else if (characterController.velocity.z<0&&characterController.velocity.x==0)
         {
-            animator.SetBool("isRun", true);
+            animator.SetBool("isRunFount", true);
+            animator.SetBool("isRunSide", false);
+        }
+        else if(characterController.velocity.z>0 && characterController.velocity.x == 0)
+        {
+            animator.SetBool("isRunFount", false);
+            animator.SetBool("isRunSide", false);
         }
         else
         {
-            animator.SetBool("isRun", false);
+            animator.SetBool("isRunFount", false);
+            animator.SetBool("isRunSide", false);
         }
 
         //移动方向
