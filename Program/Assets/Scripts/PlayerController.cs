@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
         characterController = GetComponent<CharacterController>();
+        //animator = GetComponent<Animator>();
         playerModel = GameObject.Find("PlayerModel");
         camResult= CameraCheck();
     }
@@ -54,39 +55,55 @@ public class PlayerController : MonoBehaviour
     {
         InputMove = value0.ReadValue<Vector2>();
     }
+
     /// <summary>
     /// 玩家移动方法
     /// </summary>
     void PlayerMovement()
     {
-        //动画器条件设置和Sprite翻转
-        if (characterController.velocity.x > 0)
+        float angle = CombineInputVector(new Vector2(characterController.velocity.x, characterController.velocity.z));
+        if (characterController.velocity != Vector3.zero)
         {
-            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-            animator.SetBool("isRunSide", true);
-            animator.SetBool("isRunFount", false);
-
+            Debug.Log("Angle:" + angle);
+            //动画器条件设置和Sprite翻转
+            //向左方向
+            if (angle > 134f && angle <= 226f)
+            {
+                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+                animator.SetBool("isRunSide", true);
+                animator.SetBool("isRunFount", false);
+                Debug.Log("Turn Left");
+            }
+            //向右方向
+            if (angle <= 46f&&angle>=0 || angle > 314f&&angle<360)
+            {
+                transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+                animator.SetBool("isRunSide", true);
+                animator.SetBool("isRunFount", false);
+                Debug.Log("Turn Right");
+            }
+            //向摄像机方向
+            if (angle > 46f && angle <= 134f)
+            {
+                animator.SetBool("isRunFount", true);
+                animator.SetBool("isRunSide", false);
+                Debug.Log("Turn Fount");
+            }
+            //远离摄像机方向
+            if (angle <= 314f && angle > 226f)
+            {
+                animator.SetBool("isRunFount", false);
+                animator.SetBool("isRunSide", false);
+                Debug.Log("Turn Back");
+            }
         }
-        else if (characterController.velocity.x < 0)
-        {
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-            animator.SetBool("isRunSide", true);
-            animator.SetBool("isRunFount", false);
-        }
-        else if (characterController.velocity.z<0&&characterController.velocity.x==0)
-        {
-            animator.SetBool("isRunFount", true);
-            animator.SetBool("isRunSide", false);
-        }
-        else if(characterController.velocity.z>0 && characterController.velocity.x == 0)
-        {
-            animator.SetBool("isRunFount", false);
-            animator.SetBool("isRunSide", false);
-        }
+        //静止
         else
         {
+            angle = 0;
             animator.SetBool("isRunFount", false);
             animator.SetBool("isRunSide", false);
+            Debug.Log("Stay");
         }
 
         //移动方向
@@ -100,10 +117,23 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// 由输入向量计算与X轴正半轴的夹角
+    /// </summary>
+    /// <param name="inputVector"></param>
+    /// <returns>360度制角度</returns>
+    private float CombineInputVector(Vector2 inputVector)
+    {
+        float angle = Vector3.Angle(new Vector3(1,0,0), new Vector3(inputVector.x,0,inputVector.y));
+        Vector3 cross = Vector3.Cross(new Vector3(1, 0, 0), new Vector3(inputVector.x, 0, inputVector.y));
+        if (cross.y < 0) angle = 360 - angle;
+        return angle;
+    }
+
+    /// <summary>
     /// 检查相机选择是否正确
     /// </summary>
     /// <returns></returns>
-    int CameraCheck()
+    public int CameraCheck()
     {
         //HD2D
         if (!THIRD && HD2D)
