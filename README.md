@@ -1,2 +1,0 @@
-# GbitProject
-For Gbit Competition

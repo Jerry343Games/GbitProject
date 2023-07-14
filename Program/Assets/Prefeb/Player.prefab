@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 173585361963103144}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.9211, y: 1.9211, z: 1.9211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 173585362555686821}
   m_RootOrder: 1
@@ -102,7 +102,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 13d3d10ec14da204c8b583bf76007dc6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 522d916af9f7944fc9739fa8abcde570, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -123,7 +123,7 @@ Animator:
   m_GameObject: {fileID: 173585361963103144}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a55288e5978f5534a8e2950cb4719dd2, type: 2}
+  m_Controller: {fileID: 9100000, guid: d4000d4d783bb884b93bfd1829be1993, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -283,7 +283,7 @@ MonoBehaviour:
   THIRD: 0
   mainCamera: {fileID: 0}
   tracePoint: {fileID: 173585361732313832}
-  smooth: 0.74
+  smooth: 0.2
   speed: 4
   animator: {fileID: 173585361963103150}
 --- !u!1 &173585363834397123
@@ -329,7 +329,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 10.4
+  m_Intensity: 6.45
   m_Range: 10
   m_SpotAngle: 54.98234
   m_InnerSpotAngle: 0
