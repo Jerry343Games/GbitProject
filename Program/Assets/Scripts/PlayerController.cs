@@ -4,11 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
-    private CharacterController characterController;
-    private GameObject playerModel;
-    private float horizontal;
-    private float vertical;
     private int camResult = -1;
+    private Rigidbody playerRigidbody;
+    public int healthy;
 
     /// <summary>
     /// 玩家移动方向向量
@@ -21,16 +19,22 @@ public class PlayerController : MonoBehaviour
     public bool HD2D;
     public bool THIRD;
     [Header("MainCam")]
-    //public GameObject mainCamera;
     public Transform tracePoint;
     public float smooth;
     private Vector3 camSpeed;
 
     [Header("PlayerSpeed")]
-    public float speed;
+    public float speed;//速度
 
     [Header("PlayerAnimator")]
-    public Animator animator;
+    public Animator animator;//动画机
+
+    [Header("AddForce")]
+    public float force;//碰撞传递的力
+
+    [Header("UIHurt")]
+    public GameObject UIHurt;//受伤标记
+    public  bool isInvincible;
 
     private void OnEnable()
     {
@@ -38,11 +42,11 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
-        playerModel = GameObject.Find("PlayerModel");
         camResult= CameraCheck();
+        playerRigidbody=GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         StartCoroutine(DelaySetPosition());
+        healthy = 2;
     }
 
     void Update()
@@ -65,25 +69,25 @@ public class PlayerController : MonoBehaviour
     void PlayerMovement()
     {
         //动画器条件设置和Sprite翻转
-        if (characterController.velocity.x > 0)
+        if (playerRigidbody.velocity.x > 0)
         {
             transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
             animator.SetBool("isRunSide", true);
             animator.SetBool("isRunFount", false);
 
         }
-        else if (characterController.velocity.x < 0)
+        else if (playerRigidbody.velocity.x < 0)
         {
             transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
             animator.SetBool("isRunSide", true);
             animator.SetBool("isRunFount", false);
         }
-        else if (characterController.velocity.z<0&&characterController.velocity.x==0)
+        else if (playerRigidbody.velocity.z<0&&playerRigidbody.velocity.x==0)
         {
             animator.SetBool("isRunFount", true);
             animator.SetBool("isRunSide", false);
         }
-        else if(characterController.velocity.z>0 && characterController.velocity.x == 0)
+        else if(playerRigidbody.velocity.z>0 && playerRigidbody.velocity.x == 0)
         {
             animator.SetBool("isRunFount", false);
             animator.SetBool("isRunSide", false);
@@ -96,13 +100,50 @@ public class PlayerController : MonoBehaviour
 
         //移动方向
         moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized * speed;
-        characterController.SimpleMove(moveDir);
+        playerRigidbody.velocity = moveDir;
 
         //模型朝向
         //Vector3 lookDir = transform.position + moveDir;
         //playerModel.transform.LookAt(lookDir);      
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        //如果该玩家是鬼且碰撞正常人
+        if (transform.CompareTag("Ghost") && collision.transform.CompareTag("Normal"))
+        {
+            Debug.Log(collision.transform.tag + collision.transform.GetComponent<PlayerController>().healthy);
+            //对方血量大于0时
+            if (collision.transform.GetComponent<PlayerController>().healthy > 0&&!isInvincible)
+            {
+                collision.transform.GetComponent<PlayerController>().UIHurt.SetActive(true);
+                collision.transform.GetComponent<PlayerController>().healthy--;
+                collision.transform.GetComponent<PlayerController>().isInvincible = true;
+                StartCoroutine(DelaySetInvincible(collision));
+                collision.rigidbody.AddForce(new Vector3((collision.transform.position - transform.position).x, 0.2f, (collision.transform.position - transform.position).z) * force, ForceMode.Impulse);
+                
+                //对方血量为0时
+                if (collision.transform.GetComponent<PlayerController>().healthy <= 0)
+                {
+                    //互换Tag和加满生命值
+                    collision.transform.GetComponent<PlayerController>().UIHurt.SetActive(false);
+                    collision.transform.GetComponent<PlayerController>().isInvincible = true;
+                    StartCoroutine(DelaySetInvincible(collision));
+                    UIHurt.SetActive(false);
+                    transform.tag = "Normal";
+                    collision.transform.tag = "Ghost";
+                    healthy = 2;
+                    collision.transform.GetComponent<PlayerController>().healthy = 2;
+                }
+            }
+        }
+    }
+    
+    IEnumerator DelaySetInvincible(Collision collision)
+    {
+        yield return new WaitForSeconds(0.5f);
+        collision.transform.GetComponent<PlayerController>().isInvincible = false;
+    }
     IEnumerator DelaySetPosition()
     {
         yield return new WaitForSeconds(0.1f);
@@ -163,18 +204,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 相机跟踪方法
-    /// </summary>
-    void MainCameraFollow(Transform target,GameObject mainCamera)
-    {
-        //HD2D
-        if (camResult==0)
-        {
-            mainCamera.transform.position= Vector3.SmoothDamp(mainCamera.transform.position,target.transform.position,ref camSpeed ,smooth);
-        }    
-    }
-
-
-    
 }
