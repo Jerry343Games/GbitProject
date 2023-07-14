@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public bool HD2D;
     public bool THIRD;
     [Header("MainCam")]
-    public GameObject mainCamera;
+    //public GameObject mainCamera;
     public Transform tracePoint;
     public float smooth;
     private Vector3 camSpeed;
@@ -32,18 +32,23 @@ public class PlayerController : MonoBehaviour
     [Header("PlayerAnimator")]
     public Animator animator;
 
+    private void OnEnable()
+    {
+
+    }
     void Start()
     {
-        playerInput = GetComponent<PlayerInput>();
         characterController = GetComponent<CharacterController>();
         playerModel = GameObject.Find("PlayerModel");
         camResult= CameraCheck();
+        playerInput = GetComponent<PlayerInput>();
+        StartCoroutine(DelaySetPosition());
     }
 
     void Update()
     {
         PlayerMovement();
-        MainCameraFollow(tracePoint,mainCamera);
+        //MainCameraFollow(tracePoint,mainCamera);
     }
 
     /// <summary>
@@ -95,8 +100,37 @@ public class PlayerController : MonoBehaviour
 
         //模型朝向
         //Vector3 lookDir = transform.position + moveDir;
-        //playerModel.transform.LookAt(lookDir);
-        
+        //playerModel.transform.LookAt(lookDir);      
+    }
+
+    IEnumerator DelaySetPosition()
+    {
+        yield return new WaitForSeconds(0.1f);
+        SetStartPosition();
+    }
+    
+    /// <summary>
+    /// 设置初始位置
+    /// </summary>
+    private void SetStartPosition()
+    {
+
+        if (playerInput.playerIndex == 0)
+        {
+            transform.position = Reload.P0;
+        }
+        if (playerInput.playerIndex == 1)
+        {
+            transform.position = Reload.P1;
+        }
+        if (playerInput.playerIndex == 2)
+        {
+            transform.position = Reload.P2;
+        }
+        if (playerInput.playerIndex == 3)
+        {
+            transform.position = Reload.P3;
+        }
     }
 
     /// <summary>

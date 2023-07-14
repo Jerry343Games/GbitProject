@@ -102,7 +102,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 522d916af9f7944fc9739fa8abcde570, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 93873770aa8a080449d16bdc3e865e35, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -123,7 +123,7 @@ Animator:
   m_GameObject: {fileID: 173585361963103144}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d4000d4d783bb884b93bfd1829be1993, type: 2}
+  m_Controller: {fileID: 9100000, guid: a55288e5978f5534a8e2950cb4719dd2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -182,7 +182,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &173585362642813716
 Transform:
   m_ObjectHideFlags: 0
@@ -210,8 +210,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 1.19
+  m_Radius: 0.38
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -281,7 +281,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HD2D: 1
   THIRD: 0
-  mainCamera: {fileID: 0}
   tracePoint: {fileID: 173585361732313832}
   smooth: 0.2
   speed: 4
