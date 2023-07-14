@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BellScoreManager : MonoBehaviour
+public class ScoreManager : MonoBehaviour
 {
-    public static BellScoreManager Instance { get; private set; }
+    public static ScoreManager Instance { get; private set; }
 
     private int totalScore = 0;
     private float lastIncreaseTime = 0f;
