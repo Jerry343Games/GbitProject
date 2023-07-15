@@ -21,7 +21,7 @@ Material:
     m_TexEnvs:
     - _Albedo:
         m_Texture: {fileID: 2800000, guid: a0fb89aa508325f48a55c07c83a42402, type: 3}
-        m_Scale: {x: 2, y: 2}
+        m_Scale: {x: 3.06, y: 2}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
