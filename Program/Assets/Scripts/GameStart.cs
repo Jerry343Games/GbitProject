@@ -70,6 +70,8 @@ public class GameStart : MonoBehaviour
                     if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == selectedNumber)
                     {
                         go.transform.GetComponent<PlayerController>().tag = "Ghost";
+                        go.transform.GetComponent<PlayerController>().myCharacter.SetActive(false);
+                        go.transform.GetComponent<PlayerController>().Ghost.SetActive(true);
                     }
                     if(go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == remainingNumber)
                     {
