@@ -158,17 +158,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //铃铛标识，用于调试
-        if (hasBell)
-        {
-            Vector3 newScale = new Vector3(2, 2, 2);
-            transform.localScale = newScale;
-        }
-        else
-        {
-            Vector3 newScale = new Vector3(1, 1, 1);
-            transform.localScale = newScale;
-        }
+        ////铃铛标识，用于调试
+        //if (hasBell)
+        //{
+        //    Vector3 newScale = new Vector3(2, 2, 2);
+        //    transform.localScale = newScale;
+        //}
+        //else
+        //{
+        //    Vector3 newScale = new Vector3(1, 1, 1);
+        //    transform.localScale = newScale;
+        //}
     }
 
     /// <summary>
