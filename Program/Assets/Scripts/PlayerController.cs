@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private Vector3 moveDir;
     private Vector2 InputMove;
-    PlayerInput playerInput;
+    public PlayerInput playerInput;
 
     [Header("ChooseCam")]
     public bool HD2D;
@@ -159,6 +160,15 @@ public class PlayerController : MonoBehaviour
         }
 
         ////铃铛标识，用于调试
+        if (hasBell)
+        {
+            UIBell.SetActive(true);
+        }
+        else
+        {
+            UIBell.SetActive(false);
+        }
+        ///
         //if (hasBell)
         //{
         //    Vector3 newScale = new Vector3(2, 2, 2);
@@ -184,43 +194,47 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void PlayerMovement()
     {
-        //动画器条件设置和Sprite翻转
-        if (playerRigidbody.velocity.x > 0)
+        if (GameStart.Instance.GetGameStarter())
         {
-            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-            animator.SetBool("isRunSide", true);
-            animator.SetBool("isRunFount", false);
 
-        }
-        else if (playerRigidbody.velocity.x < 0)
-        {
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-            animator.SetBool("isRunSide", true);
-            animator.SetBool("isRunFount", false);
-        }
-        else if (playerRigidbody.velocity.z < 0 && playerRigidbody.velocity.x == 0)
-        {
-            animator.SetBool("isRunFount", true);
-            animator.SetBool("isRunSide", false);
-        }
-        else if (playerRigidbody.velocity.z > 0 && playerRigidbody.velocity.x == 0)
-        {
-            animator.SetBool("isRunFount", false);
-            animator.SetBool("isRunSide", false);
-        }
-        else
-        {
-            animator.SetBool("isRunFount", false);
-            animator.SetBool("isRunSide", false);
-        }
+            //动画器条件设置和Sprite翻转
+            if (playerRigidbody.velocity.x > 0)
+            {
+                transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+                animator.SetBool("isRunSide", true);
+                animator.SetBool("isRunFount", false);
 
-        //移动方向
-        moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized * speed;
-        playerRigidbody.velocity = moveDir;
+            }
+            else if (playerRigidbody.velocity.x < 0)
+            {
+                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+                animator.SetBool("isRunSide", true);
+                animator.SetBool("isRunFount", false);
+            }
+            else if (playerRigidbody.velocity.z < 0 && playerRigidbody.velocity.x == 0)
+            {
+                animator.SetBool("isRunFount", true);
+                animator.SetBool("isRunSide", false);
+            }
+            else if (playerRigidbody.velocity.z > 0 && playerRigidbody.velocity.x == 0)
+            {
+                animator.SetBool("isRunFount", false);
+                animator.SetBool("isRunSide", false);
+            }
+            else
+            {
+                animator.SetBool("isRunFount", false);
+                animator.SetBool("isRunSide", false);
+            }
 
-        //模型朝向
-        //Vector3 lookDir = transform.position + moveDir;
-        //playerModel.transform.LookAt(lookDir);      
+            //移动方向
+            moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized * speed;
+            playerRigidbody.velocity = moveDir;
+
+            //模型朝向
+            //Vector3 lookDir = transform.position + moveDir;
+            //playerModel.transform.LookAt(lookDir);
+        }
     }
 
     //修改分数
@@ -393,6 +407,17 @@ public class PlayerController : MonoBehaviour
                     totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
                 }
 
+                //********对方，鬼变成人*********
+
+                //自己，人变成鬼
+                string prefabPath = "Assets/Effect/ChannelPink.prefab";
+                GameObject channelPinkPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                Vector3 currentPosition = transform.position;
+                Quaternion currentRotation = transform.rotation;
+                GameObject instantiatedPrefab = Instantiate(channelPinkPrefab, currentPosition, currentRotation);
+                Destroy(instantiatedPrefab, 4f);
+                StartCoroutine(EffectBoom());
+
                 //场上负标记清零
                 allGameObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject go in allGameObjects)
@@ -400,6 +425,7 @@ public class PlayerController : MonoBehaviour
                     if (go.CompareTag("Normal"))
                     {
                         go.GetComponent<PlayerController>().healthy = 1;
+                        go.GetComponent<PlayerController>().UIHurt.SetActive(false);
                     }
                 }
 
@@ -417,7 +443,7 @@ public class PlayerController : MonoBehaviour
                 collision.transform.GetComponent<PlayerController>().speed = baseSpeed;
 
                 //晕眩
-                stunDuration = 10f;
+                stunDuration = 5f;
                 isStunned = true;
             }
         }
@@ -436,7 +462,16 @@ public class PlayerController : MonoBehaviour
         }*/
 
     }
-    
+    IEnumerator EffectBoom()
+    {
+        yield return new WaitForSeconds(4f);
+        string prefabPath = "Assets/Effect/GhostExplosion.prefab";
+        GameObject GhostExplosionPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        Vector3 currentPosition = transform.position;
+        Quaternion currentRotation = transform.rotation;
+        GameObject instantiatedPrefab = Instantiate(GhostExplosionPrefab, currentPosition, currentRotation);
+        Destroy(instantiatedPrefab, 1f);
+    }
     IEnumerator DelayMyselfInvis()
     {
         yield return new WaitForSeconds(1f);
