@@ -7,13 +7,15 @@ using UnityEngine.UI;
 using static UnityEditor.Progress;
 using UnityEditor;
 using System.Reflection;
+using UnityEngine.UIElements;
+using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class PlayerController : MonoBehaviour
 {
     private int camResult = -1;
     private Rigidbody playerRigidbody;
     public int healthy;
-    private float skillCD = 10f;
+    private float skillCD = 20f;
 
     /// <summary>
     /// 玩家移动方向向量
@@ -42,8 +44,8 @@ public class PlayerController : MonoBehaviour
     [Header("PlayerScore")]
     public int score;//分数
 
-    [Header("TotalScore")]
-    public int totalScore;//总分
+    //[Header("TotalScore")]
+    //public int totalScore;//总分
 
     [Header("HasBell")]
     public bool hasBell;//是否带有铃铛
@@ -63,9 +65,8 @@ public class PlayerController : MonoBehaviour
     [Header("StunDuration")]
     public float stunDuration;// 晕眩持续时间
 
-    [Header("BellDuration")]
-    public float bellDuration;// 铃铛加分间隔时间
-
+    [Header("OpDuration")]
+    public float opDuration;// 转向持续时间
 
     [Header("PlayerAnimator")]
     public Animator animator;//动画机
@@ -79,6 +80,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("UIBell")]
     public GameObject UIBell;//铃铛标记
+
+    [Header("CurrentProp")]
+    private GameObject curProp; // 当前拾取的道具
 
     [Header("Characters")]
     public GameObject Girl;
@@ -109,8 +113,8 @@ public class PlayerController : MonoBehaviour
         isHolding = false;// 是否处于持铃状态
         boostDuration = 3f; // 加速持续时间
         stunDuration = 5f; // 晕眩持续时间
-        bellDuration = 10f; // 铃铛加分间隔时间
-        skillCD = 10f;//
+        opDuration = 0f;// 转向持续时间
+        skillCD = 20f;//
 
         UIBell.SetActive(false);
 
@@ -129,6 +133,19 @@ public class PlayerController : MonoBehaviour
         PlayerMovement();
 
         PlayerInteraction();
+        if (GameStart.Instance.GetGameStarter())
+        {
+            bellOwner();
+        }
+
+        if (isOpposite)
+        {
+            opDuration -= Time.deltaTime;
+            if (opDuration <= 0f)
+            {
+                isOpposite = false;
+            }
+        }
 
         //晕眩和加速状态
         if (isStunned)
@@ -140,8 +157,6 @@ public class PlayerController : MonoBehaviour
                 // 晕眩时间结束，恢复 鬼的 正常速度
                 isStunned = false;
                 speed = 1.2f * baseSpeed;
-
-                //****************更新模型为正常的鬼、音效****************
             }
         }
         else if (isBoosted)
@@ -157,7 +172,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (hasBell)
         {
-            speed = 0.8f * baseSpeed;
+            speed = baseSpeed;
         }
         else if (transform.CompareTag("Ghost"))
         {
@@ -167,46 +182,12 @@ public class PlayerController : MonoBehaviour
         //技能CD
         if (transform.CompareTag("Normal"))
         {
-            skillCD = 10f;
+            skillCD = 20f;
         }
         else
         {
             skillCD = Mathf.Max(skillCD-Time.deltaTime,0);
         }
-
-        //持铃加分
-        if (hasBell)
-        {
-            bellDuration -= Time.deltaTime;
-            if (bellDuration <= 0f)
-            {
-                // 铃铛加分
-                int addScore = 5 + (int)Math.Floor(totalScore * 0.01);
-                AddScore(addScore);
-                bellDuration = 10f;
-            }
-        }
-
-        ////铃铛标识，用于调试
-        if (hasBell)
-        {
-            UIBell.SetActive(true);
-        }
-        else
-        {
-            UIBell.SetActive(false);
-        }
-        ///
-        //if (hasBell)
-        //{
-        //    Vector3 newScale = new Vector3(2, 2, 2);
-        //    transform.localScale = newScale;
-        //}
-        //else
-        //{
-        //    Vector3 newScale = new Vector3(1, 1, 1);
-        //    transform.localScale = newScale;
-        //}
     }
 
     /// <summary>
@@ -289,19 +270,92 @@ public class PlayerController : MonoBehaviour
         {
             if(skillCD == 0)
             {
-                skillCD = 10f;
+                skillCD = 20f;
                 GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject go in allGameObjects)
                 {
                     if (go.CompareTag("Normal"))
                     {
-                        StartCoroutine(go.transform.GetComponent<PlayerController>().IsOpposite());
+                        go.transform.GetComponent<PlayerController>().IsOpposite();
                     }
                 }
             }
             else
             {
-                Debug.Log("技能尚未冷却！！");
+                Debug.Log("技能尚未冷却！！！");
+            }
+        }
+        else if (transform.CompareTag("Normal") && InputInteraction == 1)
+        {
+            if(curProp != null)
+            {
+                // 解除道具与玩家的关联
+                curProp.transform.SetParent(null);
+
+                // 激活道具的刚体，并施加力使其飞出去
+                Rigidbody itemRigidbody = curProp.GetComponent<Rigidbody>();
+                curProp.GetComponent<PropController>().isWeapon = true;
+                if (itemRigidbody != null)
+                {
+                    itemRigidbody.isKinematic = false;
+                    //Vector3 force = new Vector3(moveDir.x, moveDir.y, 0);
+                    //Debug.Log(transform.forward.x + " " + transform.forward.y + " " + transform.forward.z);
+                    Debug.Log(moveDir.x + " " + moveDir.z);
+                    //itemRigidbody.AddForce(transform.forward * 100, ForceMode.Impulse);
+
+                    Vector3 force = new Vector3(moveDir.x, 0, moveDir.z);
+                    itemRigidbody.AddForce(force * 10, ForceMode.Impulse);
+                }
+
+                curProp = null;
+            }
+            else
+            {
+                Debug.Log("你尚未持有道具！！！");
+            }
+        }
+    }
+
+    //判定铃铛所属
+    public void bellOwner()
+    {
+        int owner = 0;
+        int ownerScore = -999;
+        GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject go in allGameObjects)
+        {
+            if (go.CompareTag("Ghost"))
+            {
+                //删除头上的铃铛
+                go.transform.GetComponent<PlayerController>().hasBell = false;
+                go.transform.GetComponent<PlayerController>().UIBell.SetActive(false);
+            }
+            else if (go.CompareTag("Normal"))
+            {
+                //删除头上的铃铛
+                go.transform.GetComponent<PlayerController>().hasBell = false;
+                go.transform.GetComponent<PlayerController>().UIBell.SetActive(false);
+
+                if (go.GetComponent<PlayerController>().score > ownerScore)
+                {
+                    go.transform.GetComponent<PlayerController>().hasBell = true;
+                    go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
+                    ownerScore = go.GetComponent<PlayerController>().score;
+                    owner = go.transform.GetComponent<PlayerController>().playerInput.playerIndex;
+                }
+            }
+        }
+        //有道具则删除
+        allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject go in allGameObjects)
+        {
+            if((go.CompareTag("Ghost") || go.CompareTag("Normal")) && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == owner)
+            {
+                if(go.transform.GetComponent<PlayerController>().curProp != null)
+                {
+                    Destroy(go.transform.GetComponent<PlayerController>().curProp);
+                    go.transform.GetComponent<PlayerController>().curProp = null;
+                }
             }
         }
     }
@@ -312,16 +366,16 @@ public class PlayerController : MonoBehaviour
         score += addScore;
 
         //总分
-        totalScore = 0;
-        GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
-        foreach (GameObject go in allGameObjects)
-        {
-            if (go.CompareTag("Normal") || go.CompareTag("Ghost"))
-            {
-                totalScore += go.transform.GetComponent<PlayerController>().score;
-            }
-        }
-        Debug.Log(totalScore);
+        //totalScore = 0;
+        //GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+        //foreach (GameObject go in allGameObjects)
+        //{
+        //    if (go.CompareTag("Normal") || go.CompareTag("Ghost"))
+        //    {
+        //        totalScore += go.transform.GetComponent<PlayerController>().score;
+        //    }
+        //}
+        //Debug.Log(totalScore);
 
         //计分板
         int index = playerInput.playerIndex;
@@ -394,44 +448,48 @@ public class PlayerController : MonoBehaviour
 
                 if (hasBell)
                 {
-                    //删除头上的铃铛
-                    UIBell.SetActive(false);
+                    //UIBell.SetActive(false);
 
                     //算分
-                    int addScore = 6 + (int)Math.Floor(0.1 * totalScore);
+                    //int addScore = 60 + (int)Math.Floor(0.1 * totalScore);
+                    int theft = (int)Math.Floor(0.1 * score);
+                    int addScore = 60 + theft;
                     collision.transform.GetComponent<PlayerController>().AddScore(addScore);
-                    totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
+                    AddScore(-theft);
+                    //totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
 
                     //随机转移铃铛
-                    hasBell = false;
-                    bellDuration = 10f;
-                    List<int> list = new List<int>();
-                    int index = playerInput.playerIndex;
-                    GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
-                    foreach (GameObject go in allGameObjects)
-                    {
-                        if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex != index)
-                        {
-                            list.Add(go.transform.GetComponent<PlayerController>().playerInput.playerIndex);
-                        }
-                    }
-                    int randomIndex = UnityEngine.Random.Range(0, list.Count);
-                    int bellAdder = list[randomIndex];
-                    foreach (GameObject go in allGameObjects)
-                    {
-                        if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == bellAdder)
-                        {
-                            go.transform.GetComponent<PlayerController>().hasBell = true;
-                            go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
-                            break;
-                        }
-                    }
+                    //hasBell = false;
+                    //List<int> list = new List<int>();
+                    //int index = playerInput.playerIndex;
+                    //GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+                    //foreach (GameObject go in allGameObjects)
+                    //{
+                    //    if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex != index)
+                    //    {
+                    //        list.Add(go.transform.GetComponent<PlayerController>().playerInput.playerIndex);
+                    //    }
+                    //}
+                    //int randomIndex = UnityEngine.Random.Range(0, list.Count);
+                    //int bellAdder = list[randomIndex];
+                    //foreach (GameObject go in allGameObjects)
+                    //{
+                    //    if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == bellAdder)
+                    //    {
+                    //        go.transform.GetComponent<PlayerController>().hasBell = true;
+                    //        go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
+                    //        break;
+                    //    }
+                    //}
                 }
                 else
                 {
-                    int addScore = 4 + (int)Math.Floor(0.05 * totalScore);
+                    int theft = (int)Math.Floor(0.05 * score);
+                    int addScore = 40 + theft;
                     collision.transform.GetComponent<PlayerController>().AddScore(addScore);
-                    totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
+                    AddScore(-theft);
+                    //int addScore = 4 + (int)Math.Floor(0.05 * totalScore);
+                    //totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
                 }
             }
             //血量为0时
@@ -441,43 +499,50 @@ public class PlayerController : MonoBehaviour
                 if (hasBell)
                 {
                     //删除头上的铃铛
-                    UIBell.SetActive(false);
+                    //UIBell.SetActive(false);
 
                     //算分
-                    int addScore = 10 + (int)Math.Floor(0.2 * totalScore);
+                    int theft = (int)Math.Floor(0.15 * score);
+                    int addScore = 100 + theft;
                     collision.transform.GetComponent<PlayerController>().AddScore(addScore);
-                    totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
+                    AddScore(-theft);
+                    //int addScore = 10 + (int)Math.Floor(0.2 * totalScore);
+                    //collision.transform.GetComponent<PlayerController>().AddScore(addScore);
+                    //totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
 
                     //随机转移铃铛
-                    hasBell = false;
-                    bellDuration = 10f;
-                    List<int> list = new List<int>();
-                    int index = playerInput.playerIndex;
-                    allGameObjects = GameObject.FindObjectsOfType<GameObject>();
-                    foreach (GameObject go in allGameObjects)
-                    {
-                        if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex != index)
-                        {
-                            list.Add(go.transform.GetComponent<PlayerController>().playerInput.playerIndex);
-                        }
-                    }
-                    int randomIndex = UnityEngine.Random.Range(0, list.Count);
-                    int bellAdder = list[randomIndex];
-                    foreach (GameObject go in allGameObjects)
-                    {
-                        if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == bellAdder)
-                        {
-                            go.transform.GetComponent<PlayerController>().hasBell = true;
-                            go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
-                            break;
-                        }
-                    }
+                    //hasBell = false;
+                    //List<int> list = new List<int>();
+                    //int index = playerInput.playerIndex;
+                    //allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+                    //foreach (GameObject go in allGameObjects)
+                    //{
+                    //    if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex != index)
+                    //    {
+                    //        list.Add(go.transform.GetComponent<PlayerController>().playerInput.playerIndex);
+                    //    }
+                    //}
+                    //int randomIndex = UnityEngine.Random.Range(0, list.Count);
+                    //int bellAdder = list[randomIndex];
+                    //foreach (GameObject go in allGameObjects)
+                    //{
+                    //    if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == bellAdder)
+                    //    {
+                    //        go.transform.GetComponent<PlayerController>().hasBell = true;
+                    //        go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
+                    //        break;
+                    //    }
+                    //}
                 }
                 else
                 {
-                    int addScore = 6 + (int)Math.Floor(0.1 * totalScore);
+                    int theft = (int)Math.Floor(0.1 * score);
+                    int addScore = 60 + theft;
                     collision.transform.GetComponent<PlayerController>().AddScore(addScore);
-                    totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
+                    AddScore(-theft);
+                    //int addScore = 6 + (int)Math.Floor(0.1 * totalScore);
+                    //collision.transform.GetComponent<PlayerController>().AddScore(addScore);
+                    //totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
                 }
 
                 //********对方，鬼变成人*********
@@ -535,12 +600,26 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
         }
         //如果玩家正常且没有铃铛,碰撞道具
-        /*else if (transform.CompareTag("Normal") && !hasBell && collision.transform.CompareTag(""))
+        else if (transform.CompareTag("Normal") && !hasBell && collision.transform.CompareTag("Prop"))
         {
+            // 找到道具，拾取道具并将其与玩家关联
+            curProp = collision.gameObject;
+            curProp.transform.SetParent(transform);
+            Vector3 pickupOffset = new Vector3(0f, 0f, 1f);
+            curProp.transform.localPosition = pickupOffset;
 
-        }*/
+            // 停用道具的刚体，使其跟随玩家移动
+            Rigidbody itemRigidbody = curProp.GetComponent<Rigidbody>();
+            if (itemRigidbody != null)
+            {
+                itemRigidbody.isKinematic = true;
+            }
+
+        }
 
     }
+
+
     IEnumerator EffectBoom()
     {
         yield return new WaitForSeconds(4f);
@@ -558,11 +637,10 @@ public class PlayerController : MonoBehaviour
         GameObject instantiatedPrefab = Instantiate(GhostExplosionPrefab, currentPosition, currentRotation);
         Destroy(instantiatedPrefab, 1f);
     }
-    IEnumerator IsOpposite()
+    public void IsOpposite()
     {
         isOpposite = true;
-        yield return new WaitForSeconds(5f);
-        isOpposite = false;
+        opDuration = 5;
     }
     IEnumerator DelayMyselfInvis()
     {
