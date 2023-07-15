@@ -80,9 +80,18 @@ public class PlayerController : MonoBehaviour
     [Header("UIBell")]
     public GameObject UIBell;//铃铛标记
 
+    [Header("Characters")]
+    public GameObject Girl;
+    public GameObject Num;
+    public GameObject Fan;
+    public GameObject Farmer;
+    public GameObject Ghost;
+    public GameObject myCharacter;
+
+
     private void OnEnable()
     {
-
+        
     }
     void Start()
     {
@@ -228,30 +237,34 @@ public class PlayerController : MonoBehaviour
             if (playerRigidbody.velocity.x > 0)
             {
                 transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-                animator.SetBool("isRunSide", true);
-                animator.SetBool("isRunFount", false);
-
+                animator.SetBool("LeftWalk", true);
+                animator.SetBool("FontWalk", false);
+                animator.SetBool("BackWalk", false);
             }
             else if (playerRigidbody.velocity.x < 0)
             {
                 transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-                animator.SetBool("isRunSide", true);
-                animator.SetBool("isRunFount", false);
+                animator.SetBool("LeftWalk", true);
+                animator.SetBool("FontWalk", false);
+                animator.SetBool("BackWalk", false);
             }
             else if (playerRigidbody.velocity.z < 0 && playerRigidbody.velocity.x == 0)
             {
-                animator.SetBool("isRunFount", true);
-                animator.SetBool("isRunSide", false);
+                animator.SetBool("BackWalk", false);
+                animator.SetBool("FontWalk", true);
+                animator.SetBool("LeftWalk", false);
             }
             else if (playerRigidbody.velocity.z > 0 && playerRigidbody.velocity.x == 0)
             {
-                animator.SetBool("isRunFount", false);
-                animator.SetBool("isRunSide", false);
+                animator.SetBool("FontWalk", false);
+                animator.SetBool("LeftWalk", false);
+                animator.SetBool("BackWalk", true);
             }
             else
             {
-                animator.SetBool("isRunFount", false);
-                animator.SetBool("isRunSide", false);
+                animator.SetBool("FontWalk", false);
+                animator.SetBool("LeftWalk", false);
+                animator.SetBool("BackWalk", false);
             }
 
             //移动方向
@@ -468,6 +481,8 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //********对方，鬼变成人*********
+                collision.transform.GetComponent<PlayerController>().Ghost.SetActive(false);
+                collision.transform.GetComponent<PlayerController>().myCharacter.SetActive(true);
 
                 //晕眩
                 stunDuration = 5f;
@@ -503,6 +518,8 @@ public class PlayerController : MonoBehaviour
                 collision.transform.GetComponent<PlayerController>().SetInvisFalse();
                 transform.tag = "Ghost";
                 collision.transform.tag = "Normal";
+                myCharacter.SetActive(false);
+                Ghost.SetActive(true);
                 healthy = 1;
                 collision.transform.GetComponent<PlayerController>().healthy = 1;
                 collision.transform.GetComponent<PlayerController>().speed = baseSpeed;
@@ -556,6 +573,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         SetStartPosition();
+        animator = myCharacter.GetComponent<Animator>();
     }
     public void SetInvisFalse()
     {
@@ -571,20 +589,29 @@ public class PlayerController : MonoBehaviour
         if (playerInput.playerIndex == 0)
         {
             transform.position = Reload.P0;
+            Girl.SetActive(true);
+            myCharacter = Girl;
         }
         if (playerInput.playerIndex == 1)
         {
             transform.position = Reload.P1;
+            Num.SetActive(true);
+            myCharacter = Num;
         }
         if (playerInput.playerIndex == 2)
         {
             transform.position = Reload.P2;
+            Farmer.SetActive(true);
+            myCharacter = Farmer;
         }
         if (playerInput.playerIndex == 3)
         {
             transform.position = Reload.P3;
+            Fan.SetActive(true);
+            myCharacter = Fan;
         }
     }
+
 
     /// <summary>
     /// 检查相机选择是否正确
