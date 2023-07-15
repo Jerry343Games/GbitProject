@@ -46,13 +46,14 @@ public class PlayerController : MonoBehaviour
         playerRigidbody=GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         StartCoroutine(DelaySetPosition());
-        healthy = 2;
+        healthy = 1;
     }
 
     void Update()
     {
         PlayerMovement();
         //MainCameraFollow(tracePoint,mainCamera);
+
     }
 
     /// <summary>
@@ -109,45 +110,54 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //如果该玩家是鬼且碰撞正常人
-        if (transform.CompareTag("Ghost") && collision.transform.CompareTag("Normal"))
+        //如果该玩家是正常且被鬼碰撞
+        if (transform.CompareTag("Normal") && collision.transform.CompareTag("Ghost"))
         {
             Debug.Log(collision.transform.tag + collision.transform.GetComponent<PlayerController>().healthy);
-            //对方血量大于0时
-            if (collision.transform.GetComponent<PlayerController>().healthy > 0&&!isInvincible)
+            //自己血量大于0时
+            if (healthy > 0&&!isInvincible)
             {
-                collision.transform.GetComponent<PlayerController>().UIHurt.SetActive(true);
-                collision.transform.GetComponent<PlayerController>().healthy--;
+                UIHurt.SetActive(true);
+                collision.transform.GetComponent<PlayerController>().UIHurt.SetActive(false);
+                healthy--;
                 collision.transform.GetComponent<PlayerController>().isInvincible = true;
-                StartCoroutine(DelaySetInvincible(collision));
-                collision.rigidbody.AddForce(new Vector3((collision.transform.position - transform.position).x, 0.2f, (collision.transform.position - transform.position).z) * force, ForceMode.Impulse);
+                collision.transform.GetComponent<PlayerController>().SetInvisFalse();
+                isInvincible = true;
+                StartCoroutine(DelayMyselfInvis());
+                playerRigidbody.AddForce(new Vector3((transform.position - collision.transform.position).x, 0.2f, (collision.transform.position - transform.position).z) * force, ForceMode.Impulse);
                 
-                //对方血量为0时
-                if (collision.transform.GetComponent<PlayerController>().healthy <= 0)
-                {
-                    //互换Tag和加满生命值
-                    collision.transform.GetComponent<PlayerController>().UIHurt.SetActive(false);
-                    collision.transform.GetComponent<PlayerController>().isInvincible = true;
-                    StartCoroutine(DelaySetInvincible(collision));
-                    UIHurt.SetActive(false);
-                    transform.tag = "Normal";
-                    collision.transform.tag = "Ghost";
-                    healthy = 2;
-                    collision.transform.GetComponent<PlayerController>().healthy = 2;
-                }
+            }
+            //血量为0时
+            if (healthy <= 0 && !isInvincible)
+            {
+                //互换Tag和加满生命值
+                UIHurt.SetActive(false);
+                collision.transform.GetComponent<PlayerController>().UIHurt.SetActive(false);
+                isInvincible = true;
+                StartCoroutine(DelayMyselfInvis());
+                collision.transform.GetComponent<PlayerController>().isInvincible = true;
+                collision.transform.GetComponent<PlayerController>().SetInvisFalse();
+                transform.tag = "Ghost";
+                collision.transform.tag = "Normal";
+                healthy = 1;
+                collision.transform.GetComponent<PlayerController>().healthy = 1;
             }
         }
     }
     
-    IEnumerator DelaySetInvincible(Collision collision)
+    IEnumerator DelayMyselfInvis()
     {
-        yield return new WaitForSeconds(0.5f);
-        collision.transform.GetComponent<PlayerController>().isInvincible = false;
+        yield return new WaitForSeconds(1f);
+        isInvincible = false;
     }
     IEnumerator DelaySetPosition()
     {
         yield return new WaitForSeconds(0.1f);
         SetStartPosition();
+    }
+    public void SetInvisFalse()
+    {
+        StartCoroutine(DelayMyselfInvis());
     }
     
     /// <summary>
