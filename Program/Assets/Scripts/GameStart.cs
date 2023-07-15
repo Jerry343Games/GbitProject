@@ -21,6 +21,11 @@ public class GameStart : MonoBehaviour
     {
 
     }
+    public int GetCurPlayer()
+    {
+        return curPlayer;
+    }
+
     public bool GetGameStarter()
     {
         return gameStarter;
