@@ -92,6 +92,8 @@ public class PlayerController : MonoBehaviour
     public GameObject Ghost;
     public GameObject myCharacter;
 
+    public GameObject GhostSkillEffect;
+
 
     private void OnEnable()
     {
@@ -115,6 +117,7 @@ public class PlayerController : MonoBehaviour
         stunDuration = 5f; // 晕眩持续时间
         opDuration = 0f;// 转向持续时间
         skillCD = 20f;//
+        
 
         UIBell.SetActive(false);
 
@@ -270,6 +273,7 @@ public class PlayerController : MonoBehaviour
         {
             if(skillCD == 0)
             {
+                Instantiate(GhostSkillEffect, transform.position,Quaternion.Euler(90,0,0));
                 skillCD = 20f;
                 GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject go in allGameObjects)
@@ -625,7 +629,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(4f);
         //镜头晃动
         GameObject mainCameraObj = GameObject.Find("Main Camera");
-        mainCameraObj.GetComponent<CameraShake>().Shake(0.5f, 0.1f);
+        mainCameraObj.GetComponent<CameraShake>().Shake(0.3f, 0.1f);
 
         //恢复刚体
         playerRigidbody.isKinematic = false;

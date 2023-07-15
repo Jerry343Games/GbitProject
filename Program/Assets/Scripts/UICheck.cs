@@ -27,7 +27,6 @@ public class UICheck : MonoBehaviour
         if (!hasSet)
         {
             int num = GameStart.Instance.GetCurPlayer();
-            Debug.Log(num);
             switch (num)
             {
                 case 0:
