@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Pixel_Ground
+  m_Name: EffectChanel
   m_Shader: {fileID: 4800000, guid: 71d6765ad72e11541bc1448c891bbcf9, type: 3}
   m_ShaderKeywords: RECEIVE_SHADOWS_ON USE_OBJECT_POSITION_ON
   m_LightmapFlags: 4
@@ -20,8 +20,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Albedo:
-        m_Texture: {fileID: 2800000, guid: a0fb89aa508325f48a55c07c83a42402, type: 3}
-        m_Scale: {x: 2, y: 2}
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LightingRamp:
-        m_Texture: {fileID: 2800000, guid: 0a7ebf1b416d4d045b028a804724ed56, type: 3}
+        m_Texture: {fileID: 2800000, guid: b701d30b91d4a7f40b1e3f84dd32b2a3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -117,10 +117,10 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _ID: 21
+    - _ID: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _PixelSize: 2
+    - _PixelSize: 5
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -131,12 +131,12 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLight: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _AmbientLight: {r: 0.2, g: 0.2, b: 0.2, a: 0}
+    - _BaseColor: {r: 0.42830187, g: 0.9706822, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EdgeHighlightColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EdgeHighlightColor: {r: 0.18431373, g: 0.45098042, b: 0.4666667, a: 1}
+    - _EmissionColor: {r: 1, g: 0.6949685, b: 0.6949685, a: 1}
+    - _OutlineColor: {r: 0.18431373, g: 0.45098042, b: 0.4666667, a: 1}
     - _PixelGridOrigin: {r: 0.1, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
