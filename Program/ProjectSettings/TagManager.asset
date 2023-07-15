@@ -7,6 +7,7 @@ TagManager:
   - Tile
   - Normal
   - Ghost
+  - Coin
   layers:
   - Default
   - TransparentFX

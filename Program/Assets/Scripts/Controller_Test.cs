@@ -43,7 +43,7 @@
 //    //private bool isHolding = false;// 是否处于持铃状态
 //    public float boostDuration = 3f; // 加速持续时间
 //    public float stunDuration = 10f; // 晕眩持续时间
-//    public float bellDuration = 10f; // 铃铛持续时间
+//    public float bellDuration = 10f; // 铃铛加分间隔时间
 
 //    //velocity
 //    //score
@@ -89,7 +89,7 @@
 //                    BellScoreManager.Instance.SetTotalScore(BellScoreManager.Instance.GetTotalScore() + addScore);
 
 //                    //****************随机转移铃铛****************
-                    
+
 //                }
 //                else
 //                {
@@ -132,7 +132,7 @@
 //                GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
 //                foreach (GameObject go in allGameObjects)
 //                {
-//                    if(go.CompareTag("Player")&& go.GetComponent<Rigidbody>().isHuman&& go.GetComponent<Rigidbody>().isAttacked)
+//                    if (go.CompareTag("Player") && go.GetComponent<Rigidbody>().isHuman && go.GetComponent<Rigidbody>().isAttacked)
 //                    {
 //                        go.GetComponent<Rigidbody>().isAttacked = false;
 //                    }
@@ -181,7 +181,7 @@
 //        {
 //            moveDir = (new Vector3(0, 0, 0)).normalized;
 //            playerRigidbody.velocity = moveDir;
-//           stunDuration -= Time.deltaTime;
+//            stunDuration -= Time.deltaTime;
 //            if (stunDuration <= 0f)
 //            {
 //                // 晕眩时间结束，恢复 鬼的 正常速度
@@ -302,7 +302,5 @@
 //            mainCamera.transform.position = Vector3.SmoothDamp(mainCamera.transform.position, target.transform.position, ref camSpeed, smooth);
 //        }
 //    }
-
-
 
 //}
