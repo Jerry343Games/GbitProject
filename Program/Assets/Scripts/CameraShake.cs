@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraShaker : MonoBehaviour
+public class CameraShake : MonoBehaviour
 {
     private Vector3 originalPosition;
     private float shakeDuration = 0f;

@@ -212,7 +212,19 @@ MonoBehaviour:
     m_ActionId: 603fe1be-bfe8-4316-afbd-a562d9f9c0d6
     m_ActionName: Action map/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 173585362642813718}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnInteractive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 5ce78cd4-c238-4e3f-b0f1-a9d8695a1b9d
     m_ActionName: Action map/Interaction[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
@@ -233,14 +245,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthy: 0
+  playerInput: {fileID: 0}
+  isOpposite: 0
   HD2D: 1
   THIRD: 0
   tracePoint: {fileID: 0}
   smooth: 0.2
+  baseSpeed: 0
   speed: 4
+  score: 0
+  totalScore: 0
+  hasBell: 0
+  isBoosted: 0
+  isStunned: 0
+  isHolding: 0
+  boostDuration: 0
+  stunDuration: 0
+  bellDuration: 0
   animator: {fileID: 173585361963103150}
-  force: 50
+  force: 70
   UIHurt: {fileID: 649884753204593057}
+  isInvincible: 0
+  UIBell: {fileID: 0}
 --- !u!136 &6043338263984039261
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -381,7 +407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1600648650659048614
 Transform:
   m_ObjectHideFlags: 0
