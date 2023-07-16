@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class LevelTimer : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class LevelTimer : MonoBehaviour
     public static int curLevel = 1;
 
     public static bool isNight = false;
+
+    public Image ClockPer;
 
     public float GetCurTime()
     {
