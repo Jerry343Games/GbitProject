@@ -584,6 +584,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (transform.CompareTag("Normal") && collision.transform.CompareTag("Coin"))
+        {
+            AddScore(10);
+            //特效、音效
+            audioSource6.Play();
+
+            Destroy(collision.gameObject);
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         //如果该玩家是正常且被鬼碰撞
@@ -763,14 +775,14 @@ public class PlayerController : MonoBehaviour
             }
         }
         //如果玩家正常且被金币碰撞
-        else if (transform.CompareTag("Normal") && collision.transform.CompareTag("Coin"))
-        {
-            AddScore(1);
-            //特效、音效
-            audioSource6.Play();
+        //else if (transform.CompareTag("Normal") && collision.transform.CompareTag("Coin"))
+        //{
+        //    AddScore(10);
+        //    //特效、音效
+        //    audioSource6.Play();
 
-            Destroy(collision.gameObject);
-        }
+        //    Destroy(collision.gameObject);
+        //}
         //如果玩家正常且没有铃铛,碰撞道具
         else if (transform.CompareTag("Normal") && !hasBell && collision.transform.CompareTag("Prop"))
         {
@@ -804,7 +816,7 @@ public class PlayerController : MonoBehaviour
 
         audioSource1.Play();
 
-        GameObject GhostExplosionPrefab = Resources.Load<GameObject>("GhostExplosion.prefab");
+        GameObject GhostExplosionPrefab = Resources.Load<GameObject>("GhostExplosion");
         Vector3 currentPosition = transform.position;
         Quaternion currentRotation = transform.rotation;
         GameObject instantiatedPrefab = Instantiate(GhostExplosionPrefab, currentPosition, currentRotation);

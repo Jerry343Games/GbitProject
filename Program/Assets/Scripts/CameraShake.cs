@@ -26,6 +26,11 @@ public class CameraShake : MonoBehaviour
             transform.localPosition = originalPosition;
         }
     }
+    
+    public void SetShakePos(Vector3 sp)
+    {
+        originalPosition = sp;
+    }
 
     /// <summary>
     /// 相机震动方法

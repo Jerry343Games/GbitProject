@@ -35,6 +35,11 @@ public class GameStart : MonoBehaviour
         gameStarter = false;
         curPlayer = 0;
     }
+    public void SetGameStarterTrue()
+    {
+        gameStarter = true;
+        curPlayer = 4;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
