@@ -12,7 +12,7 @@ public class LevelTimer : MonoBehaviour
     public AudioSource bgmAudioSource = new AudioSource();
     public static LevelTimer Instance { get; private set; } = new LevelTimer();
 
-    public static float remainingTime = 180f;
+    public static float remainingTime = 120f;
 
     public static int curLevel = 1;
 
@@ -69,7 +69,7 @@ public class LevelTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Clock.fillAmount = remainingTime / 180f;
+        Clock.fillAmount = remainingTime / 120f;
         if (GameStart.Instance.GetGameStarter())
         {
             remainingTime = Math.Max(0f, remainingTime - Time.deltaTime);
@@ -82,7 +82,7 @@ public class LevelTimer : MonoBehaviour
             {
 
                 curLevel++;
-                remainingTime = 180f;
+                remainingTime = 120f;
                 isNight = false;
                 GoldGenerate.Instance.SetCoin(2);
 
