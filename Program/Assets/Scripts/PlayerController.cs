@@ -12,10 +12,15 @@ using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class PlayerController : MonoBehaviour
 {
+    float skillCDPreset = 20f;//boss技能冷却预设值
+    private float dashCDPreset = 3f;//冲刺冷却预设值
+
     private int camResult = -1;
     private Rigidbody playerRigidbody;
     public int healthy;
-    private float skillCD = 20f;
+    public float skillCD = 20f;//boss技能冷却
+    private float dashing = 0.2f;//冲刺过程
+    private float dashCD = 3f;//冲刺冷却
 
     /// <summary>
     /// 玩家移动方向向量
@@ -114,11 +119,10 @@ public class PlayerController : MonoBehaviour
         isBoosted = false;// 是否处于挨打加速状态
         isStunned = false;// 是否处于晕眩状态
         isHolding = false;// 是否处于持铃状态
-        boostDuration = 3f; // 加速持续时间
+        boostDuration = 3f; // 受击加速持续时间
         stunDuration = 5f; // 晕眩持续时间
         opDuration = 0f;// 转向持续时间
-        skillCD = 20f;//
-        
+        skillCD = skillCDPreset;//boss技能
 
         UIBell.SetActive(false);
 
@@ -128,7 +132,14 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            speed = 1.2f * baseSpeed;
+            if (LevelTimer.Instance.GetIsNight())
+            {
+                speed = 1.4f * baseSpeed;
+            }
+            else
+            {
+                speed = 1.2f * baseSpeed;
+            }
         }
     }
 
@@ -137,11 +148,24 @@ public class PlayerController : MonoBehaviour
         PlayerMovement();
         Dash();
         PlayerInteraction();
+
+        //判定是否处在黑夜
+        if (LevelTimer.Instance.GetIsNight())
+        {
+            skillCDPreset = 10f;
+        }
+        else
+        {
+            skillCDPreset = 20f;
+        }
+
+        //判定铃铛所属
         if (GameStart.Instance.GetGameStarter())
         {
             bellOwner();
         }
 
+        //结算方向相反时间
         if (isOpposite)
         {
             opDuration -= Time.deltaTime;
@@ -149,6 +173,16 @@ public class PlayerController : MonoBehaviour
             {
                 isOpposite = false;
             }
+        }
+
+        //冲刺
+        if (transform.CompareTag("Ghost"))
+        {
+            dashCD = dashCDPreset;
+        }
+        else if(transform.CompareTag("Normal"))
+        {
+            dashCD = Math.Max(0, dashCD - Time.deltaTime);
         }
 
         //晕眩和加速状态
@@ -160,7 +194,14 @@ public class PlayerController : MonoBehaviour
             {
                 // 晕眩时间结束，恢复 鬼的 正常速度
                 isStunned = false;
-                speed = 1.2f * baseSpeed;
+                if (LevelTimer.Instance.GetIsNight())
+                {
+                    speed = 1.4f * baseSpeed;
+                }
+                else
+                {
+                    speed = 1.2f * baseSpeed;
+                }
             }
         }
         else if (isBoosted)
@@ -186,7 +227,7 @@ public class PlayerController : MonoBehaviour
         //技能CD
         if (transform.CompareTag("Normal"))
         {
-            skillCD = 20f;
+            skillCD = skillCDPreset;
         }
         else
         {
@@ -200,14 +241,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="value0"></param>
     public void OnMovement(InputAction.CallbackContext value0)
     {
-        if (isOpposite)
-        {
-            InputMove = -1 * value0.ReadValue<Vector2>();
-        }
-        else
-        {
-            InputMove = value0.ReadValue<Vector2>();
-        }
+        InputMove = value0.ReadValue<Vector2>();
     }
 
     /// <summary>
@@ -253,7 +287,14 @@ public class PlayerController : MonoBehaviour
             }
 
             //移动方向
-            moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized ;
+            if (isOpposite)
+            {
+                moveDir = -1 * (new Vector3(InputMove.x, 0, InputMove.y)).normalized;
+            }
+            else
+            {
+                moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized;
+            }
             playerRigidbody.velocity = moveDir * speed;
 
             //模型朝向
@@ -279,8 +320,12 @@ public class PlayerController : MonoBehaviour
         {
             if(skillCD == 0)
             {
+                //镜头晃动
+                GameObject mainCameraObj = GameObject.Find("Main Camera");
+                mainCameraObj.GetComponent<CameraShake>().Shake(0.5f, 0.1f);
+
                 Instantiate(GhostSkillEffect, transform.position,Quaternion.Euler(90,0,0));
-                skillCD = 20f;
+                skillCD = skillCDPreset;
                 GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
                 foreach (GameObject go in allGameObjects)
                 {
@@ -314,7 +359,7 @@ public class PlayerController : MonoBehaviour
                     //itemRigidbody.AddForce(transform.forward * 100, ForceMode.Impulse);
 
                     Vector3 force = new Vector3(moveDir.x, 0, moveDir.z);
-                    itemRigidbody.AddForce(force * 10, ForceMode.Impulse);
+                    itemRigidbody.AddForce(force * 50, ForceMode.Impulse);
                 }
 
                 curProp = null;
@@ -432,13 +477,72 @@ public class PlayerController : MonoBehaviour
 
     private void Dash()
     {
-        if (transform.CompareTag("Normal")&&InputDash==1)
+        if (transform.CompareTag("Normal") && InputDash == 1)
         {
-            playerRigidbody.AddForce(moveDir*10, ForceMode.Impulse);
-            Quaternion rotation = Quaternion.LookRotation(moveDir);
-            Vector3 v3 = new Vector3(rotation.eulerAngles. x, rotation.eulerAngles. y, rotation.eulerAngles. z);
-            Instantiate(DashEffect, transform.position, Quaternion.Euler(180, v3.y, 0),transform.parent); //Quaternion.Euler(rotation.eulerAngles.x,rotation.eulerAngles.y,rotation.eulerAngles.z);
+            if (dashCD == 0)
+            {
+                //playerRigidbody.AddForce(moveDir * 50, ForceMode.Impulse);
+                StartCoroutine(Sprint());
+                dashCD = dashCDPreset;
+            }
+            else
+            {
+                Debug.Log("冲刺冷却中！");
+            }
         }
+    }
+
+    private IEnumerator Sprint()
+    {
+        //最大速度
+        float sprintSpeed = 16f;
+        if (hasBell)
+        {
+            sprintSpeed = 20f;
+        }
+
+        // 冲刺过程中，逐步增加玩家速度
+        float timer = 0f;
+        while (timer < dashing/2)
+        {
+            float sprintFactor = timer / dashing; // 计算冲刺进度的百分比
+            float currentSpeed = 0f;
+            if (playerRigidbody.velocity.x > 0)
+            {
+                currentSpeed = Mathf.Lerp(playerRigidbody.velocity.x, sprintSpeed, sprintFactor);
+            }
+            else
+            {
+                currentSpeed = Mathf.Lerp(playerRigidbody.velocity.x, -sprintSpeed, sprintFactor);
+            }
+            playerRigidbody.velocity = new Vector3(currentSpeed, playerRigidbody.velocity.y, playerRigidbody.velocity.z);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        Quaternion rotation = Quaternion.LookRotation(moveDir);
+        Vector3 v3 = new Vector3(rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z);
+        Instantiate(DashEffect, transform.position, Quaternion.Euler(180, v3.y, 0), transform.parent); //Quaternion.Euler(rotation.eulerAngles.x,rotation.eulerAngles.y,rotation.eulerAngles.z);
+
+        while (timer < dashing)
+        {
+            float sprintFactor = (dashing-timer) / dashing; // 计算冲刺进度的百分比
+            float currentSpeed = 0f;
+            if (playerRigidbody.velocity.x > 0)
+            {
+                currentSpeed = Mathf.Lerp(playerRigidbody.velocity.x, sprintSpeed, sprintFactor);
+            }
+            else
+            {
+                currentSpeed = Mathf.Lerp(playerRigidbody.velocity.x, -sprintSpeed, sprintFactor);
+            }
+            playerRigidbody.velocity = new Vector3(currentSpeed, playerRigidbody.velocity.y, playerRigidbody.velocity.z);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -566,7 +670,7 @@ public class PlayerController : MonoBehaviour
                     //totalScore = collision.transform.GetComponent<PlayerController>().totalScore;
                 }
 
-                //********对方，鬼变成人*********
+                //对方，鬼变成人
                 collision.transform.GetComponent<PlayerController>().Ghost.SetActive(false);
                 collision.transform.GetComponent<PlayerController>().myCharacter.SetActive(true);
 
@@ -583,6 +687,7 @@ public class PlayerController : MonoBehaviour
                 GameObject instantiatedPrefab = Instantiate(channelPinkPrefab, currentPosition, currentRotation);
                 Destroy(instantiatedPrefab, 4f);
                 StartCoroutine(EffectBoom());
+                skillCD = 0f;
 
                 //场上负标记清零
                 allGameObjects = GameObject.FindObjectsOfType<GameObject>();

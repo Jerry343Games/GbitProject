@@ -30,6 +30,11 @@ public class GameStart : MonoBehaviour
     {
         return gameStarter;
     }
+    public void SetGameStarterFalse()
+    {
+        gameStarter = false;
+        curPlayer = 0;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -72,6 +77,7 @@ public class GameStart : MonoBehaviour
                         go.transform.GetComponent<PlayerController>().tag = "Ghost";
                         go.transform.GetComponent<PlayerController>().myCharacter.SetActive(false);
                         go.transform.GetComponent<PlayerController>().Ghost.SetActive(true);
+                        go.transform.GetComponent<PlayerController>().skillCD = 0f;
                     }
                     if(go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == remainingNumber)
                     {
