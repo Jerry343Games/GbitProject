@@ -252,19 +252,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6ac12bcac8d8af4cb77281c024bb9d3, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6ac12bcac8d8af4cb77281c024bb9d3, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7069834
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6ac12bcac8d8af4cb77281c024bb9d3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.7072302
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6ac12bcac8d8af4cb77281c024bb9d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -89.98
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d6ac12bcac8d8af4cb77281c024bb9d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -2470,9 +2470,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmClip: {fileID: 0}
   bgmAudioSource: {fileID: 0}
+  camera1: {fileID: 0}
+  camera2: {fileID: 0}
+  pos1: {fileID: 0}
+  pos2: {fileID: 0}
+  pos3: {fileID: 0}
+  pos4: {fileID: 0}
+  pos5: {fileID: 0}
+  pos6: {fileID: 0}
+  pos7: {fileID: 0}
+  pos8: {fileID: 0}
   Clock: {fileID: 698010568}
-  sceneCam: {fileID: 0}
-  CamPos: []
+  Black: {fileID: 0}
 --- !u!1001 &377661037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11971,6 +11980,7 @@ MonoBehaviour:
   UIHeadImage1: {fileID: 2105258215}
   UIHeadImage2: {fileID: 1759186516}
   UIHeadImage3: {fileID: 1447232974}
+  Black: {fileID: 0}
   Scale: {x: 1.5, y: 1.5, z: 1.5}
 --- !u!4 &2062060814
 Transform:
