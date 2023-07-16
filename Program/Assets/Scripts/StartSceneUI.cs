@@ -28,6 +28,11 @@ public class StartSceneUI : MonoBehaviour
         StartCoroutine(Load());
     }
 
+    public void OnExit()
+    {
+        Application.Quit();
+    }
+
     IEnumerator Load()
     {
         yield return new WaitForSeconds(1f);

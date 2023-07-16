@@ -34,6 +34,7 @@ public class LevelTimer : MonoBehaviour
 
     public Image Clock;
     public Image Black;
+    
     public float GetCurTime()
     {
         return remainingTime;

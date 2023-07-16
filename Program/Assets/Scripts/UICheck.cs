@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class UICheck : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class UICheck : MonoBehaviour
     public Image UIHeadImage1;
     public Image UIHeadImage2;
     public Image UIHeadImage3;
+    public Button BackBtn;
+    
     bool hasSet;
     public Image Black;
     public Vector3 Scale=new Vector3(1.2f,1.2f,1.2f);
@@ -21,6 +24,10 @@ public class UICheck : MonoBehaviour
     }
 
     
+    public void OnBackBtnClick()
+    {
+        SceneManager.LoadScene("StartScene");
+    }
 
     // Update is called once per frame
     void Update()
@@ -52,7 +59,7 @@ public class UICheck : MonoBehaviour
                 case 4:
                     UIHeadImage3.transform.DOScale(1, 0.5f);
                     UIHeadImage3.transform.GetChild(0).gameObject.SetActive(true);
-                    UICheckPanel.transform.DOScale(0, 0.3f);
+                    UICheckPanel.transform.DOScaleY(0, 0.5f);
 
                     hasSet = true;
                     break;
