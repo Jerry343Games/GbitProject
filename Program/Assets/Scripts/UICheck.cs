@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class UICheck : MonoBehaviour
 {
@@ -13,10 +13,11 @@ public class UICheck : MonoBehaviour
     public Image UIHeadImage2;
     public Image UIHeadImage3;
     bool hasSet;
+    public Image Black;
     public Vector3 Scale=new Vector3(1.2f,1.2f,1.2f);
     void Start()
     {
-
+        Black.DOFade(0, 0.5f);
     }
 
     
@@ -31,7 +32,7 @@ public class UICheck : MonoBehaviour
             {
                 case 0:
                     UIHeadImage0.transform.DOScale(Scale, 0.5f);
-                    
+
                     break;
                 case 1:
                     UIHeadImage0.transform.DOScale(1, 0.5f);
@@ -52,7 +53,7 @@ public class UICheck : MonoBehaviour
                     UIHeadImage3.transform.DOScale(1, 0.5f);
                     UIHeadImage3.transform.GetChild(0).gameObject.SetActive(true);
                     UICheckPanel.transform.DOScale(0, 0.3f);
-                    
+
                     hasSet = true;
                     break;
                 default:

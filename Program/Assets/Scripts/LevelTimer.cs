@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEditor;
+using UnityEngine.UI;
+using DG.Tweening;
 
 public class LevelTimer : MonoBehaviour
 {
@@ -27,6 +29,8 @@ public class LevelTimer : MonoBehaviour
     public Transform pos7;
     public Transform pos8;
 
+    public Image Clock;
+    public Image Black;
     public float GetCurTime()
     {
         return remainingTime;
@@ -50,6 +54,7 @@ public class LevelTimer : MonoBehaviour
         bgmAudioSource.volume = 0.4f;
         bgmAudioSource.loop = true;
         PlayBGM();
+        Black.DOFade(0, 0.5f);
     }
 
     public void PlayBGM()
@@ -60,6 +65,7 @@ public class LevelTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Clock.fillAmount = remainingTime / 30f;
         if (GameStart.Instance.GetGameStarter())
         {
             remainingTime = Math.Max(0f, remainingTime - Time.deltaTime);
@@ -78,10 +84,12 @@ public class LevelTimer : MonoBehaviour
 
                 if (curLevel == 2)
                 {
+                    Black.DOFade(1, 0.5f);
                     StartCoroutine(Level2());
                 }
                 else if(curLevel == 3)
                 {
+                    Black.DOFade(1, 0.5f);
                     StartCoroutine(Level3());
                 }
                 else
@@ -98,6 +106,7 @@ public class LevelTimer : MonoBehaviour
     {
         GameStart.Instance.SetGameStarterFalse();
         yield return new WaitForSeconds(3f);
+        Black.DOFade(0, 0.25f);
         GameStart.Instance.SetGameStarterTrue();
         Camera.main.transform.GetComponent<CameraShake>().SetShakePos(camera1.position);
         Camera.main.transform.position = camera1.position;
@@ -137,6 +146,7 @@ public class LevelTimer : MonoBehaviour
     {
         GameStart.Instance.SetGameStarterFalse();
         yield return new WaitForSeconds(3f);
+        Black.DOFade(0, 0.25f);
         GameStart.Instance.SetGameStarterTrue();
         Camera.main.transform.GetComponent<CameraShake>().SetShakePos(camera2.position);
         Camera.main.transform.position = camera2.position;

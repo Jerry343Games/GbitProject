@@ -14,6 +14,9 @@ public class SceneTransform : MonoBehaviour
     public GameObject c2;
     public GameObject c3;
     public static int ChampNum;
+    public Camera SceneCam;
+    public Transform[] CamPos;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +56,13 @@ public class SceneTransform : MonoBehaviour
                 c2.transform.position = P2.position;
                 c1.transform.position = P1.position;
                 break;
+        }
+    }
+    void CheckTimer()
+    {
+        if (LevelTimer.remainingTime == 0)
+        {
+            SceneCam.transform.position = CamPos[1].position;
         }
     }
     

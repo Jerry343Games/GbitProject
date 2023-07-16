@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ScreenShader
-  m_Shader: {fileID: -6465566751694194690, guid: 31dc2ff2ba744d94699f36e6ec6fbd2a, type: 3}
+  m_Name: BlackTurn
+  m_Shader: {fileID: -6465566751694194690, guid: 7047a14543c34e242a9cf6df78925f33, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,12 +19,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_d193b0ad86474c1991ef91ecc9a77e81:
-        m_Texture: {fileID: 8400000, guid: c6cf18f93d963ed48aed20066c7a7336, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_eb1d89cf129146febdc523f3a1db8ffa_Texture_1:
-        m_Texture: {fileID: 8400000, guid: b4b6308d198f53240b2a567aba6cd897, type: 2}
+    - _SampleTexture2D_9db1195dc137408b9f1b132c8d17e545_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 8bf2f8715fe81af498670e84e5d3baeb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -39,6 +35,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
+    m_Floats:
+    - Vector1_9b27d706acac4eaf9d3c3b87e48fae74: 0
     m_Colors: []
   m_BuildTextureStacks: []

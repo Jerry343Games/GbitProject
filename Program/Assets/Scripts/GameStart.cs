@@ -8,7 +8,7 @@ public class GameStart : MonoBehaviour
     public static GameStart Instance { get; private set; } = new GameStart();
 
     public static bool gameStarter = false;
-    public static int neededPlayer = 4;
+    public static int neededPlayer = 1;
     public static int curPlayer = 0;
     // Start is called before the first frame update
     void Start()
