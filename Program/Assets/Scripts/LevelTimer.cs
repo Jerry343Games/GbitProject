@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
 
 public class LevelTimer : MonoBehaviour
 {
+    public AudioClip bgmClip; // ±≥æ∞“Ù¿÷µƒAudioClip
+    public AudioSource bgmAudioSource = new AudioSource();
     public static LevelTimer Instance { get; private set; } = new LevelTimer();
 
     public static float remainingTime = 300f;
@@ -31,7 +34,16 @@ public class LevelTimer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        bgmAudioSource = gameObject.AddComponent<AudioSource>();
+        bgmAudioSource.clip = bgmClip;
+        bgmAudioSource.volume = 0.4f;
+        bgmAudioSource.loop = true;
+        PlayBGM();
+    }
+
+    public void PlayBGM()
+    {
+        bgmAudioSource.Play();
     }
 
     // Update is called once per frame

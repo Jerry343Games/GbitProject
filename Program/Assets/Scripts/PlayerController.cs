@@ -12,6 +12,20 @@ using static UnityEngine.EventSystems.StandaloneInputModule;
 
 public class PlayerController : MonoBehaviour
 {
+    //音效
+    public AudioSource audioSource1 = new AudioSource();
+    public AudioSource audioSource2 = new AudioSource();
+    public AudioSource audioSource3 = new AudioSource();
+    public AudioSource audioSource4 = new AudioSource();
+    public AudioSource audioSource5 = new AudioSource();
+    public AudioSource audioSource6 = new AudioSource();
+    public AudioClip mp3Audio1;
+    public AudioClip mp3Audio2;
+    public AudioClip mp3Audio3;
+    public AudioClip mp3Audio4;
+    public AudioClip mp3Audio5;
+    public AudioClip mp3Audio6;
+
     float skillCDPreset = 20f;//boss技能冷却预设值
     private float dashCDPreset = 3f;//冲刺冷却预设值
 
@@ -107,6 +121,27 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
+        //音效
+        audioSource1 = gameObject.AddComponent<AudioSource>();
+        audioSource1.clip = mp3Audio1;
+        audioSource1.loop = false;
+        audioSource2 = gameObject.AddComponent<AudioSource>();
+        audioSource2.clip = mp3Audio2;
+        audioSource2.loop = false;
+        audioSource3 = gameObject.AddComponent<AudioSource>();
+        audioSource3.clip = mp3Audio3;
+        audioSource3.loop = false;
+        audioSource4 = gameObject.AddComponent<AudioSource>();
+        audioSource4.clip = mp3Audio4;
+        audioSource4.loop = false;
+        audioSource5 = gameObject.AddComponent<AudioSource>();
+        audioSource5.clip = mp3Audio5;
+        audioSource5.loop = false;
+        audioSource6 = gameObject.AddComponent<AudioSource>();
+        audioSource6.clip = mp3Audio6;
+        audioSource6.loop = false;
+
+
         camResult = CameraCheck();
         playerRigidbody = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
@@ -324,6 +359,9 @@ public class PlayerController : MonoBehaviour
                 GameObject mainCameraObj = GameObject.Find("Main Camera");
                 mainCameraObj.GetComponent<CameraShake>().Shake(0.5f, 0.1f);
 
+                //音效
+                audioSource2.Play();
+
                 Instantiate(GhostSkillEffect, transform.position,Quaternion.Euler(90,0,0));
                 skillCD = skillCDPreset;
                 GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
@@ -481,6 +519,8 @@ public class PlayerController : MonoBehaviour
         {
             if (dashCD == 0)
             {
+                audioSource3.Play();
+
                 //playerRigidbody.AddForce(moveDir * 50, ForceMode.Impulse);
                 StartCoroutine(Sprint());
                 dashCD = dashCDPreset;
@@ -550,9 +590,14 @@ public class PlayerController : MonoBehaviour
         //如果该玩家是正常且被鬼碰撞
         if (transform.CompareTag("Normal") && collision.transform.CompareTag("Ghost") && !collision.transform.GetComponent<PlayerController>().isStunned)
         {
-            //镜头晃动
-            GameObject mainCameraObj = GameObject.Find("Main Camera");
-            mainCameraObj.GetComponent<CameraShake>().Shake(0.5f, 0.1f);
+            if (!isInvincible)
+            {
+                //镜头晃动
+                GameObject mainCameraObj = GameObject.Find("Main Camera");
+                mainCameraObj.GetComponent<CameraShake>().Shake(0.5f, 0.1f);
+
+                audioSource4.Play();
+            }
 
             Debug.Log(collision.transform.tag + collision.transform.GetComponent<PlayerController>().healthy);
             //自己血量大于0时
@@ -680,6 +725,8 @@ public class PlayerController : MonoBehaviour
                 playerRigidbody.isKinematic = true;
 
                 //自己，人变成鬼
+                audioSource5.Play();
+
                 string prefabPath = "Assets/Effect/ChannelPink.prefab";
                 GameObject channelPinkPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
                 Vector3 currentPosition = transform.position;
@@ -721,7 +768,8 @@ public class PlayerController : MonoBehaviour
         else if (transform.CompareTag("Normal") && collision.transform.CompareTag("Coin"))
         {
             AddScore(1);
-            //*****特效、音效*****
+            //特效、音效
+            audioSource6.Play();
 
             Destroy(collision.gameObject);
         }
@@ -755,6 +803,8 @@ public class PlayerController : MonoBehaviour
 
         //恢复刚体
         playerRigidbody.isKinematic = false;
+
+        audioSource1.Play();
 
         string prefabPath = "Assets/Effect/GhostExplosion.prefab";
         GameObject GhostExplosionPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);

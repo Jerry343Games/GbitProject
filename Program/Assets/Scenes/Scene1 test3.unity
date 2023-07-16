@@ -862,6 +862,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a25f6fc730b526647a57c892def99961, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgmClip: {fileID: 8300000, guid: 0216a4f3c838d0c45b64b3140f9b0e8d, type: 3}
+  bgmAudioSource: {fileID: 0}
 --- !u!1 &708390866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1693,6 +1695,30 @@ PrefabInstance:
       propertyPath: UIBell
       value: 
       objectReference: {fileID: 491403276}
+    - target: {fileID: 173585362642813718, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
+      propertyPath: mp3Audio1
+      value: 
+      objectReference: {fileID: 8300000, guid: f9c8aebddd238464a95bcfb89d636cf0, type: 3}
+    - target: {fileID: 173585362642813718, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
+      propertyPath: mp3Audio2
+      value: 
+      objectReference: {fileID: 8300000, guid: 4325a0d803d75e544893927b0bba8a56, type: 3}
+    - target: {fileID: 173585362642813718, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
+      propertyPath: mp3Audio3
+      value: 
+      objectReference: {fileID: 8300000, guid: 50edd9539ce1a4d4d991b3d0b416b5eb, type: 3}
+    - target: {fileID: 173585362642813718, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
+      propertyPath: mp3Audio4
+      value: 
+      objectReference: {fileID: 8300000, guid: 61cdd292230eb3f48b27ee5746dfd821, type: 3}
+    - target: {fileID: 173585362642813718, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
+      propertyPath: mp3Audio5
+      value: 
+      objectReference: {fileID: 8300000, guid: 7b23c8f5f55d6f74781714c169bed536, type: 3}
+    - target: {fileID: 173585362642813718, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
+      propertyPath: mp3Audio6
+      value: 
+      objectReference: {fileID: 8300000, guid: 6b4d782eab9e8df41adc0aa4a13625d3, type: 3}
     - target: {fileID: 649884753204593057, guid: 56f44a403f51bc04cb4ef42cbfbab697, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -2179,6 +2205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isWeapon: 0
   duration: 3
+  audioSource1: {fileID: 0}
 --- !u!54 &1570965149
 Rigidbody:
   m_ObjectHideFlags: 0
