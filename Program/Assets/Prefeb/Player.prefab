@@ -234,6 +234,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5ce78cd4-c238-4e3f-b0f1-a9d8695a1b9d
     m_ActionName: Action map/Interaction[/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 173585362642813718}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: c441ba97-59f5-4832-ba15-117a51c76452
+    m_ActionName: Action map/Dash[/XInputControllerWindows/dpad/right,/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Action map
@@ -280,6 +296,7 @@ MonoBehaviour:
   Ghost: {fileID: 7218536487125551922}
   myCharacter: {fileID: 0}
   GhostSkillEffect: {fileID: 5171025193243381888, guid: 642601f2b6f771f4c8d27e54f10a2145, type: 3}
+  DashEffect: {fileID: 4830635108079946243, guid: 23b38b6cbd1c64440a1f7a1af930fd8e, type: 3}
 --- !u!136 &6043338263984039261
 CapsuleCollider:
   m_ObjectHideFlags: 0

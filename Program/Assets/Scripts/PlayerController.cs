@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public bool isOpposite;
 
     private float InputInteraction = 0f;
+    private float InputDash = 0f;
 
     [Header("ChooseCam")]
     public bool HD2D;
@@ -91,9 +92,9 @@ public class PlayerController : MonoBehaviour
     public GameObject Farmer;
     public GameObject Ghost;
     public GameObject myCharacter;
-
+    [Header("Effect")]
     public GameObject GhostSkillEffect;
-
+    public GameObject DashEffect;
 
     private void OnEnable()
     {
@@ -134,7 +135,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         PlayerMovement();
-
+        Dash();
         PlayerInteraction();
         if (GameStart.Instance.GetGameStarter())
         {
@@ -252,8 +253,8 @@ public class PlayerController : MonoBehaviour
             }
 
             //移动方向
-            moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized * speed;
-            playerRigidbody.velocity = moveDir;
+            moveDir = (new Vector3(InputMove.x, 0, InputMove.y)).normalized ;
+            playerRigidbody.velocity = moveDir * speed;
 
             //模型朝向
             //Vector3 lookDir = transform.position + moveDir;
@@ -265,6 +266,11 @@ public class PlayerController : MonoBehaviour
     {
         InputInteraction = value0.ReadValue<float>();
         //Debug.Log(InputInteraction);
+    }
+
+    public void OnDash(InputAction.CallbackContext value0)
+    {
+        InputDash = value0.ReadValue<float>();
     }
 
     void PlayerInteraction()
@@ -421,6 +427,17 @@ public class PlayerController : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    private void Dash()
+    {
+        if (transform.CompareTag("Normal")&&InputDash==1)
+        {
+            playerRigidbody.AddForce(moveDir*10, ForceMode.Impulse);
+            Quaternion rotation = Quaternion.LookRotation(moveDir);
+            Vector3 v3 = new Vector3(rotation.eulerAngles. x, rotation.eulerAngles. y, rotation.eulerAngles. z);
+            Instantiate(DashEffect, transform.position, Quaternion.Euler(180, v3.y, 0),transform.parent); //Quaternion.Euler(rotation.eulerAngles.x,rotation.eulerAngles.y,rotation.eulerAngles.z);
         }
     }
 
