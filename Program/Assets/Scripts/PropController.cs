@@ -10,11 +10,14 @@ public class PropController : MonoBehaviour
     public float duration = 3f;
 
     //“Ù–ß
-    public AudioSource audioSource1;
+    public AudioSource audioSource1 = new AudioSource();
+    public AudioClip mp3Audio1;
 
     void Start()
     {
-
+        audioSource1 = gameObject.AddComponent<AudioSource>();
+        audioSource1.clip = mp3Audio1;
+        audioSource1.loop = false;
     }
 
     // Update is called once per frame
@@ -37,9 +40,6 @@ public class PropController : MonoBehaviour
             if (collision.gameObject.CompareTag("Normal") || collision.gameObject.CompareTag("Ghost"))
             {
                 //“Ù–ß
-                string prefabPath = "Assets/Sound/Role/Human/Hit.mp3";
-                AudioClip mp3Audio = AssetDatabase.LoadAssetAtPath<AudioClip>(prefabPath);
-                audioSource1.clip = mp3Audio;
                 audioSource1.Play();
 
                 PlayerController player = collision.gameObject.GetComponent<PlayerController>();

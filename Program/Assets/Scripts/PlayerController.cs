@@ -4,7 +4,6 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 using UnityEditor;
 using System.Reflection;
 using UnityEngine.UIElements;
@@ -727,8 +726,7 @@ public class PlayerController : MonoBehaviour
                 //自己，人变成鬼
                 audioSource5.Play();
 
-                string prefabPath = "Assets/Effect/ChannelPink.prefab";
-                GameObject channelPinkPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+                GameObject channelPinkPrefab =  Resources.Load<GameObject>("ChannelPink");
                 Vector3 currentPosition = transform.position;
                 Quaternion currentRotation = transform.rotation;
                 GameObject instantiatedPrefab = Instantiate(channelPinkPrefab, currentPosition, currentRotation);
@@ -806,8 +804,7 @@ public class PlayerController : MonoBehaviour
 
         audioSource1.Play();
 
-        string prefabPath = "Assets/Effect/GhostExplosion.prefab";
-        GameObject GhostExplosionPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        GameObject GhostExplosionPrefab = Resources.Load<GameObject>("GhostExplosion.prefab");
         Vector3 currentPosition = transform.position;
         Quaternion currentRotation = transform.rotation;
         GameObject instantiatedPrefab = Instantiate(GhostExplosionPrefab, currentPosition, currentRotation);

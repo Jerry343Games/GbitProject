@@ -2206,6 +2206,7 @@ MonoBehaviour:
   isWeapon: 0
   duration: 3
   audioSource1: {fileID: 0}
+  mp3Audio1: {fileID: 8300000, guid: 61cdd292230eb3f48b27ee5746dfd821, type: 3}
 --- !u!54 &1570965149
 Rigidbody:
   m_ObjectHideFlags: 0
