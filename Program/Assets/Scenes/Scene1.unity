@@ -2773,7 +2773,6 @@ GameObject:
   m_Component:
   - component: {fileID: 402506289}
   - component: {fileID: 402506288}
-  - component: {fileID: 402506287}
   - component: {fileID: 402506286}
   m_Layer: 0
   m_Name: Camera
@@ -2815,14 +2814,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &402506287
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 402506285}
-  m_Enabled: 1
 --- !u!20 &402506288
 Camera:
   m_ObjectHideFlags: 0
@@ -4562,7 +4553,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651041052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.53, y: -0.74, z: -3.45}
+  m_LocalPosition: {x: 4.72, y: -0.74, z: -3.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 779215716}
@@ -10348,6 +10339,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b121cb82edfccfa49a98db1dbb2eb281, type: 3}
+--- !u!1 &1620872268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: db8c97d1b54c27940acd9cfa2ca69f23, type: 3}
+  m_PrefabInstance: {fileID: 618714239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1620872269
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620872268}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.007092766, y: 0.0070927646, z: 0.021713628}
+  m_Center: {x: -1.5428463e-16, y: -1.5428463e-16, z: 0.010856814}
 --- !u!1001 &1655794593
 PrefabInstance:
   m_ObjectHideFlags: 0

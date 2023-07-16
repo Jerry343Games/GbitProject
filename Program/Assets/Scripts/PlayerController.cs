@@ -285,33 +285,38 @@ public class PlayerController : MonoBehaviour
     {
         if (GameStart.Instance.GetGameStarter())
         {
-
-            //动画器条件设置和Sprite翻转
-            if (playerRigidbody.velocity.x > 0)
+            if (Mathf.Abs( playerRigidbody.velocity.x) > 0.1 || Mathf.Abs( playerRigidbody.velocity.z )> 0.1)
             {
-                transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
-                animator.SetBool("LeftWalk", true);
-                animator.SetBool("FontWalk", false);
-                animator.SetBool("BackWalk", false);
-            }
-            else if (playerRigidbody.velocity.x < 0)
-            {
-                transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
-                animator.SetBool("LeftWalk", true);
-                animator.SetBool("FontWalk", false);
-                animator.SetBool("BackWalk", false);
-            }
-            else if (playerRigidbody.velocity.z < 0 && playerRigidbody.velocity.x == 0)
-            {
-                animator.SetBool("BackWalk", false);
-                animator.SetBool("FontWalk", true);
-                animator.SetBool("LeftWalk", false);
-            }
-            else if (playerRigidbody.velocity.z > 0 && playerRigidbody.velocity.x == 0)
-            {
-                animator.SetBool("FontWalk", false);
-                animator.SetBool("LeftWalk", false);
-                animator.SetBool("BackWalk", true);
+                //动画器条件设置和Sprite翻转
+                float angle = Angle_360(playerRigidbody.velocity, new Vector3(1, 0, 0));
+                Debug.Log(angle);
+                //动画器条件设置和Sprite翻转
+                if (angle <= 44 || angle > 316)
+                {
+                    transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z);
+                    animator.SetBool("LeftWalk", true);
+                    animator.SetBool("FontWalk", false);
+                    animator.SetBool("BackWalk", false);
+                }
+                else if (angle > 136 && angle <= 224)
+                {
+                    transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z);
+                    animator.SetBool("LeftWalk", true);
+                    animator.SetBool("FontWalk", false);
+                    animator.SetBool("BackWalk", false);
+                }
+                else if (angle > 224 && angle <= 316)
+                {
+                    animator.SetBool("BackWalk", false);
+                    animator.SetBool("FontWalk", true);
+                    animator.SetBool("LeftWalk", false);
+                }
+                else if (angle > 44 && angle <= 136)
+                {
+                    animator.SetBool("FontWalk", false);
+                    animator.SetBool("LeftWalk", false);
+                    animator.SetBool("BackWalk", true);
+                }
             }
             else
             {
@@ -319,6 +324,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("LeftWalk", false);
                 animator.SetBool("BackWalk", false);
             }
+
 
             //移动方向
             if (isOpposite)
@@ -336,7 +342,17 @@ public class PlayerController : MonoBehaviour
             //playerModel.transform.LookAt(lookDir);
         }
     }
-    
+
+    public float Angle_360(Vector3 from_, Vector3 to_)
+    {
+        Vector3 v3 = Vector3.Cross(from_, to_);
+        if (v3.y > 0)
+            return Vector3.Angle(from_, to_);
+        else
+            return 360 - Vector3.Angle(from_, to_);
+    }
+
+
     public void OnInteractive(InputAction.CallbackContext value0)
     {
         InputInteraction = value0.ReadValue<float>();
