@@ -12,7 +12,7 @@ public class LevelTimer : MonoBehaviour
     public AudioSource bgmAudioSource = new AudioSource();
     public static LevelTimer Instance { get; private set; } = new LevelTimer();
 
-    public static float remainingTime = 30f;
+    public static float remainingTime = 10f;
 
     public static int curLevel = 1;
 
@@ -28,6 +28,9 @@ public class LevelTimer : MonoBehaviour
     public Transform pos6;
     public Transform pos7;
     public Transform pos8;
+
+    public Transform cameraend;
+    public Transform champion;
 
     public Image Clock;
     public Image Black;
@@ -69,7 +72,7 @@ public class LevelTimer : MonoBehaviour
         if (GameStart.Instance.GetGameStarter())
         {
             remainingTime = Math.Max(0f, remainingTime - Time.deltaTime);
-            if(remainingTime < 30f)
+            if(remainingTime < 10f)
             {
                 isNight = true;
                 GoldGenerate.Instance.SetCoin(4);
@@ -78,7 +81,7 @@ public class LevelTimer : MonoBehaviour
             {
 
                 curLevel++;
-                remainingTime = 30f;
+                remainingTime = 10f;
                 isNight = false;
                 GoldGenerate.Instance.SetCoin(2);
 
@@ -94,9 +97,8 @@ public class LevelTimer : MonoBehaviour
                 }
                 else
                 {
-                    //关卡结束
-                    Debug.Log("关卡结束！");
-                    GameStart.Instance.SetGameStarterFalse();
+                    Black.DOFade(1, 0.5f);
+                    StartCoroutine(LevelEnd());
                 }
             }
         }
@@ -182,4 +184,77 @@ public class LevelTimer : MonoBehaviour
         }
     }
 
+    IEnumerator LevelEnd()
+    {
+        GameStart.Instance.SetGameStarterFalse();
+        yield return new WaitForSeconds(3f);
+        Black.DOFade(0, 0.25f);
+
+        int owner = 0;
+        int ownerScore = -999;
+        GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (GameObject go in allGameObjects)
+        {
+            if (go.CompareTag("Normal"))
+            {
+                if (go.GetComponent<PlayerController>().score > ownerScore)
+                {
+                    //go.transform.GetComponent<PlayerController>().hasBell = true;
+                    //go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
+                    ownerScore = go.GetComponent<PlayerController>().score;
+                    owner = go.transform.GetComponent<PlayerController>().playerInput.playerIndex;
+                }
+            }
+        }
+
+        Camera.main.transform.GetComponent<CameraShake>().SetShakePos(cameraend.position);
+        Camera.main.transform.position = cameraend.position;
+        Debug.Log(Camera.main.transform.position.x + " " + Camera.main.transform.position.y + " " + Camera.main.transform.position.z);
+
+        allGameObjects = GameObject.FindObjectsOfType<GameObject>();
+        if (owner == 0)
+        {
+            foreach (GameObject go in allGameObjects)
+            {
+                if (go.name == "CharacterGirl")
+                {
+                    go.transform.position = champion.position;
+                    break;
+                }
+            }
+        }
+        else if (owner == 1)
+        {
+            foreach (GameObject go in allGameObjects)
+            {
+                if (go.name == "CharacterNum")
+                {
+                    go.transform.position = champion.position;
+                    break;
+                }
+            }
+        }
+        else if (owner == 2)
+        {
+            foreach (GameObject go in allGameObjects)
+            {
+                if (go.name == "CharacterFarmer")
+                {
+                    go.transform.position = champion.position;
+                    break;
+                }
+            }
+        }
+        else if (owner == 3)
+        {
+            foreach (GameObject go in allGameObjects)
+            {
+                if (go.name == "CharacterHelsing")
+                {
+                    go.transform.position = champion.position;
+                    break;
+                }
+            }
+        }
+    }
 }

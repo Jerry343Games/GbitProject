@@ -105,9 +105,10 @@ GameObject:
   - component: {fileID: 8136223084446472113}
   - component: {fileID: 6463326140808891145}
   - component: {fileID: 5128493394229667392}
+  - component: {fileID: 5694057422864972011}
   m_Layer: 0
   m_Name: bottle
-  m_TagString: Untagged
+  m_TagString: Prop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -199,7 +200,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8136223084446472118}
   serializedVersion: 2
-  m_Mass: 3
+  m_Mass: 2
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -207,3 +208,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5694057422864972011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136223084446472118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d4ca898d78e67f41a6162d08508715e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isWeapon: 0
+  duration: 3
+  audioSource1: {fileID: 0}
+  mp3Audio1: {fileID: 8300000, guid: 20ff920a6cbeb564a8eccec550d60fe6, type: 3}

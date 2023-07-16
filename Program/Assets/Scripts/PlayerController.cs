@@ -386,7 +386,7 @@ public class PlayerController : MonoBehaviour
 
                 // 激活道具的刚体，并施加力使其飞出去
                 Rigidbody itemRigidbody = curProp.GetComponent<Rigidbody>();
-                curProp.GetComponent<PropController>().isWeapon = true;
+                StartCoroutine(aaa());
                 if (itemRigidbody != null)
                 {
                     itemRigidbody.isKinematic = false;
@@ -407,9 +407,15 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    private IEnumerator aaa()
+    {
+        yield return new WaitForSeconds(0.8f);
+        curProp.GetComponent<PropController>().isWeapon = true;
+    }
 
-    //判定铃铛所属
-    public void bellOwner()
+
+        //判定铃铛所属
+        public void bellOwner()
     {
         int owner = 0;
         int ownerScore = -999;
@@ -430,8 +436,8 @@ public class PlayerController : MonoBehaviour
 
                 if (go.GetComponent<PlayerController>().score > ownerScore)
                 {
-                    go.transform.GetComponent<PlayerController>().hasBell = true;
-                    go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
+                    //go.transform.GetComponent<PlayerController>().hasBell = true;
+                    //go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
                     ownerScore = go.GetComponent<PlayerController>().score;
                     owner = go.transform.GetComponent<PlayerController>().playerInput.playerIndex;
                 }
@@ -449,8 +455,15 @@ public class PlayerController : MonoBehaviour
                     go.transform.GetComponent<PlayerController>().curProp = null;
                 }
             }
+            if (go.CompareTag("Normal") && go.transform.GetComponent<PlayerController>().playerInput.playerIndex == owner)
+            {
+                go.transform.GetComponent<PlayerController>().hasBell = true;
+                go.transform.GetComponent<PlayerController>().UIBell.SetActive(true);
+            }
         }
     }
+
+
 
     //修改分数
     public void AddScore(int addScore)
@@ -784,7 +797,7 @@ public class PlayerController : MonoBehaviour
         //    Destroy(collision.gameObject);
         //}
         //如果玩家正常且没有铃铛,碰撞道具
-        else if (transform.CompareTag("Normal") && !hasBell && collision.transform.CompareTag("Prop"))
+        else if (transform.CompareTag("Normal") && curProp == null && !hasBell && collision.transform.CompareTag("Prop"))
         {
             // 找到道具，拾取道具并将其与玩家关联
             curProp = collision.gameObject;
