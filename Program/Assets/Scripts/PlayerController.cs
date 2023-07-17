@@ -620,6 +620,11 @@ public class PlayerController : MonoBehaviour
             AddScore(10);
             //特效、音效
             audioSource6.Play();
+            GameObject coinPrefab = Resources.Load<GameObject>("CoinExplosion");
+            Vector3 currentPosition = collision.transform.position;
+            Quaternion currentRotation = collision.transform.rotation;
+            GameObject instantiatedPrefab = Instantiate(coinPrefab, currentPosition, currentRotation);
+            Destroy(instantiatedPrefab, 1f);
 
             Destroy(collision.gameObject);
         }
