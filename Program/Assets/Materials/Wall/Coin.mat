@@ -135,7 +135,7 @@ Material:
     - _BaseColor: {r: 1, g: 0.886951, b: 0.6, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeHighlightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.754717, g: 0.68307453, b: 0.3446066, a: 1}
     - _OutlineColor: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
     - _PixelGridOrigin: {r: 0.1, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

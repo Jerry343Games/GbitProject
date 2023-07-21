@@ -46,17 +46,17 @@ public class GameStart : MonoBehaviour
         if (collision.transform.CompareTag("Normal"))
         {
             curPlayer++;
-            Debug.Log("µ±Ç°ÈËÊı:"+curPlayer);
+            Debug.Log("å½“å‰äººæ•°:"+curPlayer);
             if (curPlayer == neededPlayer)
             {
                 gameStarter = true;
-                // ´Ó0µ½3Ö®¼äÑ¡ÔñÒ»¸öÊı
+                // ä»0åˆ°3ä¹‹é—´é€‰æ‹©ä¸€ä¸ªæ•°
                 int selectedNumber = Random.Range(0, 4);
 
-                // Ê£ÏÂµÄÊı
+                // å‰©ä¸‹çš„æ•°
                 int remainingNumber = -1;
 
-                // ¸ù¾İÑ¡ÖĞµÄÊı£¬Ñ¡ÔñÊ£ÏÂµÄÊı
+                // æ ¹æ®é€‰ä¸­çš„æ•°ï¼Œé€‰æ‹©å‰©ä¸‹çš„æ•°
                 if (selectedNumber == 0)
                 {
                     remainingNumber = Random.Range(1, 4);

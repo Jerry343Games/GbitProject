@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DestroyCoin : MonoBehaviour
 {
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,6 @@ public class DestroyCoin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        transform.Rotate( Vector3.up*speed,Space.Self);
     }
 }

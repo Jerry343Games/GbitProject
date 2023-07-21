@@ -8,6 +8,7 @@ using UnityEditor;
 using System.Reflection;
 using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.StandaloneInputModule;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -103,6 +104,9 @@ public class PlayerController : MonoBehaviour
     [Header("CurrentProp")]
     private GameObject curProp; // 当前拾取的道具
 
+    [Header("Light")]
+    public GameObject Light;
+
     [Header("Characters")]
     public GameObject Girl;
     public GameObject Num;
@@ -113,7 +117,7 @@ public class PlayerController : MonoBehaviour
     [Header("Effect")]
     public GameObject GhostSkillEffect;
     public GameObject DashEffect;
-
+    
     private void OnEnable()
     {
         
@@ -182,6 +186,16 @@ public class PlayerController : MonoBehaviour
         PlayerMovement();
         Dash();
         PlayerInteraction();
+
+        if (transform.CompareTag("Ghost"))
+        {
+            Light.GetComponent<Light>().color = Color.red;
+        }
+        else
+        {
+            Light.GetComponent<Light>().color = Color.white;
+        }
+
 
         //判定是否处在黑夜
         if (LevelTimer.Instance.GetIsNight())
@@ -364,6 +378,12 @@ public class PlayerController : MonoBehaviour
         InputDash = value0.ReadValue<float>();
     }
 
+    IEnumerator DelayScreenEffect(GameObject gameObject)
+    {
+        yield return new WaitForSeconds(5f);
+        gameObject.transform.DOScale(new Vector3(3.8f, 3.8f, 3.8f), 0.2f);
+    }
+
     void PlayerInteraction()
     {
         if(transform.CompareTag("Ghost") && InputInteraction == 1)
@@ -377,6 +397,10 @@ public class PlayerController : MonoBehaviour
                 //音效
                 audioSource2.Play();
 
+                //屏幕特效
+                GameObject ghostPowerEffect = GameObject.Find("GhostPower");
+                ghostPowerEffect.transform.DOScale(new Vector3(2f, 2f, 2f), 0.2f);
+                StartCoroutine(DelayScreenEffect(ghostPowerEffect));
                 Instantiate(GhostSkillEffect, transform.position,Quaternion.Euler(90,0,0));
                 skillCD = skillCDPreset;
                 GameObject[] allGameObjects = GameObject.FindObjectsOfType<GameObject>();

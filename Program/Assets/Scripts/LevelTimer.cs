@@ -8,7 +8,7 @@ using DG.Tweening;
 
 public class LevelTimer : MonoBehaviour
 {
-    public AudioClip bgmClip; // ±³¾°ÒôÀÖµÄAudioClip
+    public AudioClip bgmClip; // èƒŒæ™¯éŸ³ä¹çš„AudioClip
     public AudioSource bgmAudioSource = new AudioSource();
     public static LevelTimer Instance { get; private set; } = new LevelTimer();
 
@@ -63,7 +63,7 @@ public class LevelTimer : MonoBehaviour
 
     public void PlayBGM()
     {
-        bgmAudioSource.Play();
+        //bgmAudioSource.Play();
     }
 
     // Update is called once per frame
